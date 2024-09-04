@@ -1,0 +1,63 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.0'
+	id 'io.spring.dependency-management' version '1.1.5'
+}
+
+group = 'pucmm.eict.library'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Spring Boot dependencies
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb' // Starter for MongoDB support
+	implementation 'org.springframework.boot:spring-boot-starter-security'   // Starter for Spring Security
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'  // Starter for Thymeleaf templating engine
+	implementation 'org.springframework.boot:spring-boot-starter-web'         // Starter for building web, including RESTful, applications
+	implementation 'org.springframework.boot:spring-boot-starter-validation' // Starter for bean validation
+
+	// Google Cloud dependencies
+	implementation 'com.google.cloud:google-cloud-storage:2.1.0' // Google Cloud Storage client library
+	implementation 'com.google.cloud:spring-cloud-gcp-dependencies:5.4.1' // Google Cloud Spring dependencies (appears duplicated, consider removing one)
+
+	// JWT (JSON Web Token) dependencies
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'  // JJWT API
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5' // JJWT Implementation
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5' // JJWT Jackson Integration
+
+	// Commons IO library for file operations
+	implementation 'commons-io:commons-io:2.11.0'
+
+	// Lombok for reducing boilerplate code
+	compileOnly 'org.projectlombok:lombok' // Lombok for compile-time code generation
+	annotationProcessor 'org.projectlombok:lombok' // Lombok annotation processor
+
+	// Testing dependencies
+	testImplementation 'org.springframework.boot:spring-boot-starter-test' // Starter for testing Spring Boot applications
+	testImplementation 'org.springframework.security:spring-security-test' // Testing support for Spring Security
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // JUnit Platform launcher for running tests
+
+	// SendGrid email client
+	implementation 'com.sendgrid:sendgrid-java:4.10.2'
+}
+
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

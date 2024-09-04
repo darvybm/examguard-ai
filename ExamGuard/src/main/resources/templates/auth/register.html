@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/register-style.css">
+</head>
+<body>
+
+<div class="register-page">
+    <img src="assets/img/backgrounds/banner-background.png" alt="Banner Background" class="banner-background">
+    <div class="register-container">
+        <img src="assets/img/logos/examguard-logo.svg" alt="Exam Guard IA Logo" class="logo">
+        <div class="card">
+            <h2 class="title">Register</h2>
+
+            <form th:action="@{/register}" method="post" th:object="${user}" id="register-form">
+
+                <label for="name" class="input-label">Nombre</label>
+                <input type="text" id="name" name="name" class="form-control input-field" placeholder="Ingrese su nombre" th:field="*{name}">
+                <div class="form-error" id="name-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+
+                <label for="job-role" class="input-label">Rol Laboral</label>
+                <input type="text" id="job-role" name="role" class="form-control input-field" placeholder="Ingrese su rol laboral" th:field="*{role}">
+                <div class="form-error" id="role-error" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></div>
+
+                <label for="institution" class="input-label">Institución/Empresa</label>
+                <input type="text" id="institution" name="institution" class="form-control input-field" placeholder="Ingrese el nombre de su institución o empresa" th:field="*{institution}">
+                <div class="form-error" id="institution-error" th:if="${#fields.hasErrors('institution')}" th:errors="*{institution}"></div>
+
+                <label for="email" class="input-label">Email</label>
+                <input type="text" id="email" name="email" class="form-control input-field" placeholder="Ingrese su correo electrónico" th:field="*{email}">
+                <div class="form-error" id="email-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+                <label for="password" class="input-label">Contraseña</label>
+                <input type="password" id="password" name="password" class="form-control input-field" placeholder="Ingrese su contraseña" th:field="*{password}">
+                <div class="form-error" id="password-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+
+                <button type="submit" class="register-btn">Registrarse</button>
+
+            </form>
+        </div>
+
+        <p class="have-account">¿Ya tienes cuenta? <a href="/login">Iniciar sesión</a></p>
+
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer.html :: footer}">...</div>
+
+<script src="https://kit.fontawesome.com/c6ad53a8f6.js" crossorigin="anonymous"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const nameField = document.getElementById('name');
+        const roleField = document.getElementById('job-role');
+        const institutionField = document.getElementById('institution');
+        const emailField = document.getElementById('email');
+        const passwordField = document.getElementById('password');
+
+        nameField.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Previene el comportamiento por defecto
+                roleField.focus(); // Mueve el foco al campo de rol laboral
+            }
+        });
+
+        roleField.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Previene el comportamiento por defecto
+                institutionField.focus(); // Mueve el foco al campo de institución/empresa
+            }
+        });
+
+        institutionField.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Previene el comportamiento por defecto
+                emailField.focus(); // Mueve el foco al campo de correo electrónico
+            }
+        });
+
+        emailField.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Previene el comportamiento por defecto
+                passwordField.focus(); // Mueve el foco al campo de contraseña
+            }
+        });
+
+        passwordField.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Previene el comportamiento por defecto
+                document.querySelector('.register-btn').click(); // Simula el click en el botón de registro
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

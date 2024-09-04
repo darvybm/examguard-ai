@@ -1,0 +1,13 @@
+cvlib==0.2.7
+Flask==3.0.3
+mediapipe==0.10.14
+numpy~=1.26.4
+opencv_contrib_python==4.9.0.80
+opencv_python==4.9.0.80
+opencv_python_headless==4.8.0.74
+ultralytics~=8.2.28
+torch --index-url https://download.pytorch.org/whl/cu124
+torchaudio --index-url https://download.pytorch.org/whl/cu124
+torchvision --index-url https://download.pytorch.org/whl/cu124
+tensorflow
+pyjwt==2.9.0

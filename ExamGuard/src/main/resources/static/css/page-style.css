@@ -1,0 +1,385 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    padding-top: 80px;
+}
+
+.navbar {
+    height: 80px;
+    background-color: #fff;
+    box-shadow: 3px 11.5px 32px 5.5px rgba(0, 0, 0, 0.3);
+}
+
+.section {
+    min-height: calc(100vh - 80px); 
+}
+
+#section1 {
+    position: relative;
+    background-color: #2B486E;
+    color: white;
+}
+
+#section2 {
+    background-color: #EEEEEE;
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+}
+
+#section3 {
+    background-color: #EEEEEE;
+}
+
+#section4 {
+    background-color: #005DE2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: calc(100vh - 80px)
+}
+
+#footer {
+    background-color: #2B486E;
+    color: white;
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; /* Bold */
+    text-align: center;
+    padding: 1em; /* Ajusta el padding según sea necesario */
+    margin: 0 auto; /* Asegura que esté centrado horizontalmente */
+    max-width: 80%; /* Ajusta el ancho máximo según tus necesidades */
+    font-size: 3em;
+    z-index: 2;
+}
+
+
+.nav-link {
+    color: black;
+}
+
+.banner-background {
+    position: absolute;
+    height: 100%; 
+    width: 100%; 
+    object-fit: cover;
+    opacity: 0.3;
+}
+
+.banner-shape {
+    position: absolute;
+    width: 45%;
+    min-width: 20rem;
+    max-width: 42rem;
+    left: 0;
+    bottom: 0;
+}
+
+.vector-uno {
+    position: absolute;
+    height: 25em;
+    left: 0;
+    bottom: 0;
+}
+
+.vector-dos {
+    position: absolute;
+    height: 20em;
+    right: 0;
+    bottom: 0;
+}
+
+.content {
+    position: absolute;
+    top: 10%;
+    right: 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800; /* Extra bold */
+    font-size: calc(1rem + 5vw); /* Ajusta el tamaño de fuente según el viewport */
+    padding: 0.2em 0;
+    margin: 0;
+}
+
+.subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500; /* Medium */
+    font-size: calc(1rem + 2vw);
+    text-align: right;
+    margin-bottom: 1rem;
+    max-width: 16em; /* Ajusta este valor según tus necesidades */
+    word-wrap: break-word;
+}
+
+
+.btn-group-banner {
+    gap: 0.5em;
+}
+
+.btn-custom {
+    margin: 0.5em 0;
+    border-radius: 25px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    height: 50px;
+    width: 15em;
+    transition: transform 0.3s; /* Agregar una transición para suavizar el cambio */
+}
+
+.btn-custom img, .btn-custom img {
+    width: 1.8rem;
+    margin-right: 5px;
+}
+
+.btn-custom:hover {
+    transform: scale(1.1); /* Aumentar el tamaño en 1.1 veces en hover */
+}
+
+.btn-signup {
+    background-color: #2B486E;
+    color: white !important;
+    width: 10em;
+}
+
+.btn-mail {
+    background-color: #00A7FF;
+    height: 4rem;
+    width: 18rem;
+    font-size: 1.3rem;
+}
+
+.btn-mail img {
+    width: 2.3rem;
+    margin-right: 0.2rem;
+}
+
+.btn-google {
+    background-color: #fff;
+    color: #000000;
+    height: 60px;
+}
+
+.card {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    background: transparent;
+    border: 1px solid #ccc;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    max-width: 40rem;
+}
+
+.card-icon {
+    height: 8rem; /* Ajusta el tamaño del icono según sea necesario */
+    width: auto;
+    margin: auto;
+    padding: 1rem;
+    flex-shrink: 0; /* Evita que el icono se encoja */
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1; /* Permite que el contenido ocupe todo el espacio disponible */
+}
+
+.card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; /* Bold */
+    font-size: 1.5em; /* Ajusta el tamaño según sea necesario */
+    margin: 0;
+    text-align: left; /* Asegura que el texto esté alineado a la izquierda */
+}
+
+.card-description {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500; /* Medium */
+    font-size: 1em; /* Ajusta el tamaño según sea necesario */
+    margin: 0.5em 0 0 0; /* Ajusta el margen según sea necesario */
+    text-align: left; /* Asegura que el texto esté alineado a la izquierda */
+}
+
+
+.mini-header {
+    position: relative;
+    background-color: #2B486E;
+    height: 10em; /* Mantiene el tamaño del encabezado constante */
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    box-sizing: border-box; /* Asegura que el padding se incluya en el tamaño total */
+}
+
+.buho-image {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    height: 18rem; /* Mantiene las proporciones de la imagen */
+}
+
+.quote-text {
+    font-style: italic;
+    font-size: 1.8em; /* Ajusta el tamaño del texto */
+    color: #FAFEFE; /* Color del texto */
+    margin: auto; /* Centra el texto horizontalmente */
+    text-align: center; /* Centra el texto horizontalmente */
+    padding: 0 1rem; /* Añade un poco de espacio a los lados del texto */
+    max-width: calc(100% - 18rem); /* Ajusta el máximo ancho del texto para que no se desborde */
+}
+
+.about-content {
+    padding: 2em 0;
+}
+
+.about-the-project, .about-me {
+    max-width: 40em;
+    padding: 1em;
+    margin: 1.5em;
+    height: 100%;
+}
+
+.about-content h2 {
+    font-weight: 700;
+    font-size: 3em;
+}
+
+
+.about-content p {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    text-align: justify;
+}
+
+.section-title-4 {
+    text-align: center;
+    color: #EEE;
+    z-index: 2;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    margin: 0 auto;
+    font-size: 3em;
+    padding: 1em;
+    width: 100%;
+}
+
+.vector-tres {
+    position: absolute;
+    max-height: 20rem;
+    left: 0;
+    top: 0;
+    z-index: 0;
+}
+
+.vector-tres {
+    position: absolute;
+    max-height: 25rem;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 0;
+}
+
+.vector-cuatro {
+    position: absolute;
+    max-height: 25rem;
+    max-width: 100%;
+    left: 0;
+    bottom: 0;
+    z-index: 0;
+}
+
+.example-image {
+    width: 100%;
+    max-width: 60rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 2rem;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Media queries para ajustar el tamaño en pantallas más pequeñas */
+@media (max-width: 992px) {
+    .buho-image {
+        height: 15rem; /* Reduce el tamaño de la imagen en pantallas medianas */
+    }
+
+    .quote-text {
+        font-size: 1.5em; /* Reduce el tamaño del texto */
+        padding: 0 0.5rem; /* Ajusta el padding */
+    }
+}
+
+@media (max-width: 768px) {
+
+    .buho-image {
+        height: 12rem; /* Reduce el tamaño de la imagen en pantallas más pequeñas */
+    }
+
+    .quote-text {
+        font-size: 1.2em; /* Reduce el tamaño del texto */
+        padding: 0 0.5rem; /* Ajusta el padding */
+        max-width: 100%; /* Asegura que el texto no se desborde */
+    }
+}
+
+
+@media (max-width: 576px) {
+    .buho-image {
+        height: 8rem; /* Reduce aún más el tamaño de la imagen en pantallas muy pequeñas */
+    }
+
+    .quote-text {
+        font-size: 1em; /* Reduce el tamaño del texto */
+        padding: 0 0.25rem; /* Ajusta el padding */
+    }
+
+    .card {
+        flex-direction: column; /* Asegura que el icono esté arriba */
+    }
+
+    .card-title {
+        text-align: center; /* Centra el título */
+    }
+
+    .card-description {
+        text-align: center; /* Centra la descripción */
+    }
+
+    .section-title {
+        font-size: 2em; /* Ajusta el tamaño del título */
+    }
+
+    .about-me h2 {
+        font-size: 2rem;
+    }
+
+    .about-the-project h2  {
+        font-size: 2rem;
+    }
+}
+

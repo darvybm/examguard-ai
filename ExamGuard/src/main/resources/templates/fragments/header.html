@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Header</title>
+</head>
+<body>
+<header class="header header-sticky" th:fragment="header">
+    <div class="container-fluid">
+
+        <button class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
+            <svg class="icon icon-lg">
+                <i class="fas fa-bars"></i> <!-- Font Awesome icon -->
+            </svg>
+        </button>
+
+
+        <a class="header-brand d-md-none" href="#">
+            <svg width="118" height="46" alt="CoreUI Logo">
+            </svg>
+        </a>
+
+        <ul class="header-nav ms-3">
+            <li class="nav-item dropdown">
+                <a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+
+                    <div class="avatar avatar-md" style="background-color: #005DE2; color: #FAFEFE; text-align: center; line-height: 2em; border-radius: 50%; overflow: hidden; font-weight: bold; font-size: 1.2em;">
+                        <span th:text="${#authentication.principal.username.substring(0, 1).toUpperCase()}"></span>
+                    </div>
+
+                </a>
+                <div class="dropdown-menu dropdown-menu-end pt-0">
+                    <div class="dropdown-header bg-light py-2">
+                        <div class="fw-semibold">Account</div>
+                    </div>
+                    <a class="dropdown-item" href="/logout">
+                        <svg class="icon me-2"></svg> Logout
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+</header>
+</body>
+</html>

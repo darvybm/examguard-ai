@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="./">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
+  <title>Recordings</title>
+  <meta name="msapplication-TileColor" content="#ffffff">
+
+  <!--styles-->
+  <link rel="stylesheet" href="/vendors/simplebar/css/simplebar.css">
+  <link rel="stylesheet" href="/css/vendors/simplebar.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" type="text/css"/>
+  <link rel="stylesheet" href="/vendors/datatables/dataTables.bootstrap4.min.css">
+
+  <style>
+    .card {
+      height: 100%;
+      border: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-statistics {
+      border-left: solid 0.6rem #216398;
+    }
+
+    .icon-xxxl {
+      font-size: 2rem;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adding shadow to the icons */
+    }
+
+    .icon-color-fraud {
+      color: #ff6f61; /* Example color for fraud percentage */
+    }
+
+    .icon-color-recordings, .icon-color-time {
+      color: #005DE2; /* Example color for average fraud, total recordings, and average time */
+    }
+
+    #timelines-table {
+      width: 100%;
+      min-width: 70rem;
+    }
+
+    #timelines-table td {
+      padding: 2rem 2rem; /* Padding de 2rem arriba y abajo, 1rem a los lados */
+      border: 1px solid rgba(0, 0, 0, 0.1); /* Bordes muy sutiles */
+    }
+
+    #timelines-table tr {
+      transition: box-shadow 0.3s ease, transform 0.3s ease; /* Transición suave para la sombra y transformación */
+      border: none;
+    }
+
+    /* Estilos para el hover sobre las celdas de la tabla */
+    #timelines-table tr:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 0 -8px 16px rgba(0, 0, 0, 0.2); /* Sombra arriba y abajo */
+      transform: scale(1.02); /* Escalado ligeramente mayor al hacer hover */
+      cursor: pointer;
+      background: white;
+    }
+
+    #timeline-detail-table td {
+      padding: 2rem 2rem; /* Padding de 2rem arriba y abajo, 1rem a los lados */
+      border: 1px solid rgba(0, 0, 0, 0.1); /* Bordes muy sutiles */
+    }
+
+    #timeline-detail-table {
+      width: 100%;
+    }
+
+    #timeline-detail-table tr {
+      transition: box-shadow 0.3s ease, transform 0.3s ease; /* Transición suave para la sombra y transformación */
+      border: none;
+    }
+
+    /* Estilos para el hover sobre las celdas de la tabla */
+    #timeline-detail-table tr:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 0 -8px 16px rgba(0, 0, 0, 0.2); /* Sombra arriba y abajo */
+      transform: scale(1.02); /* Escalado ligeramente mayor al hacer hover */
+      cursor: pointer;
+      background: white;
+    }
+
+    .time-bar-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #2B486E;
+      margin-bottom: 0.5rem;
+    }
+
+    .time-bar {
+      position: relative;
+      height: 2rem; /* Altura de la barra de tiempo */
+      background-color: #eaeaea;
+      width: 100%; /* Ocupa el 70% del contenedor */
+      overflow: hidden; /* Asegura que los segmentos no se salgan del contenedor */
+    }
+
+    .segment {
+      position: absolute;
+      height: 100%; /* Altura de los segmentos */
+      top: 0;
+      z-index: 1;
+      transition: all 0.3s ease; /* Transición suave para cambios */
+      background: #2B486E;
+    }
+
+    .segment:hover {
+      opacity: 0.8; /* Reducción de opacidad al pasar el mouse */
+      transform: scale(1.1); /* Escalado del segmento al hacer hover */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra al hacer hover */
+      border: 4px solid #005DE2; /* Borde al hacer hover */
+      cursor: pointer;
+    }
+
+    .time-reference-bar {
+      position: relative;
+      height: 1.5rem;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .time-reference-bar .time-marker {
+      position: absolute;
+      top: 0;
+      font-size: 0.8rem;
+      color: #2B486E;
+    }
+
+    .tooltip.custom-tooltip .tooltip-inner {
+      background-color: #2B486E; /* Cambia el color de fondo */
+      color: white; /* Cambia el color del texto */
+      font-size: 14px; /* Cambia el tamaño de la fuente */
+      padding: 10px; /* Cambia el padding */
+      border-radius: 8px; /* Cambia el radio de los bordes */
+    }
+
+    .tooltip.custom-tooltip .arrow::before {
+      border-top-color: #2B486E; /* Cambia el color de la flecha */
+    }
+
+    /* Panel lateral derecho */
+    .side-panel {
+      height: 100%;
+      width: 0;
+      overflow-y: auto;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      right: 0;
+      background-color: white;
+      transition: 0.25s;
+      padding-top: 60px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      scrollbar-width: none;
+    }
+
+    .side-panel::-webkit-scrollbar {
+      display: none; /* Oculta la barra de desplazamiento en navegadores basados en Webkit */
+    }
+
+    .side-panel-content {
+      padding: 2rem;
+    }
+
+    .side-panel .modal-header {
+      background: linear-gradient(to left, #2FA473, #214c72);
+      color: white;
+      height: 3.5rem;
+      padding: 0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .side-panel .modal-title {
+      font-size: 1.5rem;
+    }
+
+    /* Estilos para el icono de cerrar */
+    .btn-close-icon {
+      position: absolute;
+      right: 20px;
+      font-size: 2rem;
+      color: #d7ffed; /* Color de tu elección */
+      cursor: pointer;
+    }
+
+    .btn-close-icon:hover {
+      color: #1F3553; /* Color de hover de tu elección */
+    }
+
+    .image-card {
+      height: 10rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra con desenfoque suave */
+      transition: transform 0.3s ease; /* Efecto de transición para suavizar cambios */
+      overflow: hidden; /* Para asegurar que el contenido no se desborde */
+    }
+
+    .image-card:hover {
+      transform: scale(0.8); /* Escala la imagen al 110% en hover */
+      cursor: pointer;
+    }
+
+    .segment-active {
+      background: #00A7FF !important;
+    }
+
+    .color-low {
+      color: #2FA473 !important;
+    }
+
+    .background-color-low {
+      background-color: #2FA473 !important;
+    }
+
+    .color-medium {
+      color: #ffdd00 !important;
+    }
+
+    .background-color-medium {
+      background-color: #ffdd00 !important;
+    }
+
+    .color-high {
+      color: #f6a000 !important;
+    }
+
+    .background-color-high {
+      background-color: #f6a000 !important;
+    }
+
+    .color-very-high {
+      color: #c45353 !important;
+    }
+
+    .background-color-very-high {
+      background-color: #c45353 !important;
+    }
+
+    .badge {
+      font-size: 1em;
+      padding: 0.5em 1em;
+    }
+
+    #event-list .badge {
+      font-size: 1rem; /* Tamaño de fuente más pequeño */
+      padding: 0.5rem 1rem; /* Espaciado interno más pequeño */
+      border-radius: 1.5rem; /* Bordes más redondeados */
+      font-weight: normal; /* Texto no negrita */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .badge-info {
+      background-color: #A1D4F4;
+      color: #003d66;
+    }
+
+    .badge-phone { background-color: #A1D4F4; color: #003d66; }
+    .badge-mouse { background-color: #C2E2F7; color: #003d66; }
+    .badge-keyboard { background-color: #E3F0FC; color: #003d66; }
+    .badge-monitor { background-color: #7BB8F3; color: #003d66; }
+    .badge-laptop { background-color: #4A6FB1; color: #E3F0FC; }
+    .badge-not-face { background-color: #A1D4F4; color: #003d66; }
+    .badge-multiple-face { background-color: #C2E2F7; color: #003d66; }
+    .badge-head-pose-left { background-color: #7BB8F3; color: #003d66; }
+    .badge-head-pose-right { background-color: #C2E2F7; color: #003d66; }
+    .badge-head-pose-up { background-color: #4A6FB1; color: #E3F0FC; }
+    .badge-head-pose-down { background-color: #4A6FB1; color: #E3F0FC; }
+    .badge-head-pose-forward { background-color: #7BB8F3; color: #003d66; }
+    .badge-head-pose-unknown { background-color: #A1D4F4; color: #003d66; }
+    .badge-safe { background-color: #C2E2F7; color: #003d66; }
+
+    .spinner-border {
+      width: 3rem;
+      height: 3rem;
+      border-width: 0.3em;
+      color: #2B486E;
+    }
+
+    /* Estilo para el enlace de la página activa */
+    .page-item .page-link {
+      color: #214c72 !important; /* Cambia el color del texto */
+    }
+
+    .page-item.active .page-link {
+      color: #ffffff !important; /* Cambia el color del texto */
+      background-color: #214c72 !important; /* Cambia el color de fondo */
+      border: 1px solid #214c72 !important; /* Cambia el color del borde */
+    }
+
+    /* Estilo para el contenedor de imágenes */
+    #image-grid-container {
+      height: 100%;
+      scrollbar-width: none; /* Oculta la barra de desplazamiento */
+    }
+
+    /* Ocultar scrollbar en navegadores basados en Webkit (Chrome, Safari) */
+    #image-grid-container::-webkit-scrollbar {
+      width: 0; /* Oculta la barra de desplazamiento horizontal */
+      height: 0; /* Oculta la barra de desplazamiento vertical */
+    }
+
+    .time-control-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0;
+    }
+
+    .time-control-bar .btn-icon {
+      background-color: transparent;
+      border: none;
+      font-size: 1.2rem;
+      color: #d7d7d7; /* Color del ícono */
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .time-control-bar .btn-icon:hover {
+      color: #214c72; /* Color del ícono al pasar el ratón */
+    }
+
+    .time-reference-bar {
+      position: relative;
+      height: 50px;
+    }
+
+
+    .time-marker {
+      position: absolute;
+    }
+
+    .time-marker-line {
+      position: absolute;
+      bottom: 0; /* Alinea el palito con el borde inferior del contenedor */
+      width: 1px; /* Ancho del palito */
+      height: 20px; /* Altura del palito */
+      background-color: rgba(0, 0, 0, 0.2); /* Color del palito */
+    }
+
+    .time-marker-line-special {
+      background-color: #2B486E;
+    }
+  </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/loading.html :: loading}">...</div>
+
+<div th:replace="~{fragments/sidebar.html :: sidebar}">...</div>
+
+<div class="wrapper d-flex flex-column min-vh-100 bg-light">
+
+  <div th:replace="~{fragments/header.html :: header}">...</div>
+
+  <div id="banner" class="mb-2">
+    <h1 class="display-5" th:text="${recording.getName()}">Folder Details</h1>
+  </div>
+
+  <div class="body flex-grow-1 px-3">
+    <div class="row mt-4">
+      <!-- Card 1: Porcentaje de Fraude -->
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-2">
+        <div class="card card-statistics">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div class="text-medium-emphasis text-end mb-4">
+              <i class="fa fa-exclamation-triangle icon-xxxl" id="fraud-icon"></i>
+            </div>
+            <div>
+              <div class="fs-4 fw-semibold" th:text="${#numbers.formatDecimal(recording.getFraudPercentage(), 2, 2)} + '%'"></div>
+              <small class="text-medium-emphasis text-uppercase fw-semibold">Porcentaje de Fraude</small>
+            </div>
+            <div class="progress progress-thin mt-3 mb-0">
+              <div id="fraud-progress-bar" class="progress-bar bg-info" role="progressbar" th:style="'width:' + ${recording.getFraudPercentage()} + '%'" th:aria-valuenow="${recording.getFraudPercentage()}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Cantidad Total de Eventos -->
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-2">
+        <div class="card card-statistics">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div class="text-medium-emphasis text-end mb-4">
+              <i class="fa fa-video icon-xxxl icon-color-recordings"></i>
+            </div>
+            <div>
+              <div class="fs-4 fw-semibold" th:text="${recording.getEvents().size()}">0</div>
+              <small class="text-medium-emphasis text-uppercase fw-semibold">Total de Eventos</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Cantidad Total de Eventos Fraudulentos -->
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-2">
+        <div class="card card-statistics">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div class="text-medium-emphasis text-end mb-4">
+              <i class="fa fa-exclamation-triangle icon-xxxl icon-color-fraud"></i>
+            </div>
+            <div>
+              <div class="fs-4 fw-semibold" th:text="${recording.getFraudEvents().size()}">0</div>
+              <small class="text-medium-emphasis text-uppercase fw-semibold">Total de Eventos Fraudulentos</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Tiempo del Video -->
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-2">
+        <div class="card card-statistics">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div class="text-medium-emphasis text-end mb-4">
+              <i class="fa fa-clock icon-xxxl icon-color-time"></i>
+            </div>
+            <div>
+              <div class="fs-4 fw-semibold" th:text="${recording.getFormattedDuration()}">0</div>
+              <small class="text-medium-emphasis text-uppercase fw-semibold">Duración</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <!-- Horizontal Bar Chart -->
+      <div class="col-sm-6 col-lg-6 col-md-12 mb-2">
+        <div class="card">
+          <div class="card-header">Cantidad de Fraude Detectado por Tipo de Evento</div>
+          <div class="card-body">
+            <canvas id="barChart" style="max-height: 25rem; min-height: 15rem; height: 100%!important; width: 100%!important;"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Radar Chart -->
+      <div class="col-sm-6 col-lg-6 col-md-12 mb-2">
+        <div class="card">
+          <div class="card-header">Tendencia de la Mirada</div>
+          <div class="card-body">
+            <canvas id="radarChart" style="max-height: 25rem; min-height: 15rem; height: 100%!important; width: 100%!important;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Listado de Eventos Seleccionados -->
+    <div class="card mt-4">
+      <div class="card-header">Eventos Seleccionados</div>
+      <div class="card-body">
+        <div id="event-list" class="d-flex justify-content-center flex-wrap gap-3">
+          <!-- Aquí se agregarán los badges dinámicamente -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Listado de Timelines -->
+    <div class="row mt-4">
+      <div class="col-sm-12 mb-4">
+        <div class="card">
+          <div class="card-header">Timeline</div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table id="timelines-table">
+                <tbody>
+                <!-- Verificar si hay líneas de tiempo para mostrar -->
+                <th:block th:if="${recording.getTimelines().isEmpty()}">
+                  <tr>
+                    <td colspan="2">
+                      <div class="time-reference-bar">
+                        <div th:each="i : ${#numbers.sequence(0, recording.getDuration(), (recording.getDuration() < 20 ? 1 : recording.getDuration() / 20))}">
+                          <div class="time-marker-line"
+                               th:style="'left: ' + (${i} / ${recording.getDuration()}) * 100 + '%; transform: translateX(-50%)'">
+                          </div>
+                        </div>
+                        <div th:each="i : ${#numbers.sequence(0, recording.getDuration(), (recording.getDuration() < 10 ? 1 : recording.getDuration() / 10))}">
+                          <div class="time-marker-line time-marker-line-special"
+                               th:style="'left: ' + (${i} / ${recording.getDuration()}) * 100 + '%; transform: translateX(-50%)'">
+                          </div>
+                          <div class="time-marker"
+                               th:style="'left: ' + (${i} / ${recording.getDuration()}) * 100 + '%; transform: translateX(-50%)'"
+                               th:text="${#numbers.formatDecimal(i / 60, 0, '0')} + ':' + ${#numbers.formatDecimal(i % 60, 0, '0')} + 'm'">
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr style="text-align: center; width: 100%">
+                    <td colspan="2">
+                      <div style="display: flex; align-items: center; justify-content: center;">
+                        <span style="margin-right: 8px;"><i class="fas fa-info-circle"></i></span>
+                        <span>No hay datos disponibles</span>
+                      </div>
+                    </td>
+
+                  </tr>
+                </th:block>
+
+                <th:block th:unless="${timelines.isEmpty()}">
+
+                  <tr>
+                    <td></td>
+                    <td>
+                      <div class="time-reference-bar">
+                        <div th:each="i : ${#numbers.sequence(0, recording.getDuration(), (recording.getDuration() < 20 ? 1 : recording.getDuration() / 20))}">
+                          <div class="time-marker-line"
+                               th:style="'left: ' + (${i} / ${recording.getDuration()}) * 100 + '%; transform: translateX(-50%)'">
+                          </div>
+                        </div>
+                        <div th:each="i : ${#numbers.sequence(0, recording.getDuration(), (recording.getDuration() < 10 ? 1 : recording.getDuration() / 10))}">
+                          <div class="time-marker-line time-marker-line-special"
+                               th:style="'left: ' + (${i} / ${recording.getDuration()}) * 100 + '%; transform: translateX(-50%)'">
+                          </div>
+                          <div class="time-marker"
+                               th:style="'left: ' + (${i} / ${recording.getDuration()}) * 100 + '%; transform: translateX(-50%)'"
+                               th:text="${#numbers.formatDecimal(i / 60, 0, '0')} + ':' + ${#numbers.formatDecimal(i % 60, 0, '0')} + 'm'">
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Iterar sobre las líneas de tiempo -->
+                  <tr th:each="timeline : ${recording.getTimelines()}">
+                    <td th:text="${timeline.eventType}"></td>
+                    <td style="width: 100%">
+                      <div class="time-bar-container">
+                        <div class="time-bar">
+                          <!-- Usar Thymeleaf para crear segmentos -->
+                          <div th:each="segment : ${timeline.segments}">
+                            <div class="segment"
+                                 th:style="'left: ' + (${segment.startSecond} / ${recording.getDuration()}) * 100 + '%; width: ' + (((${segment.endSecond} - ${segment.startSecond} + 1) / ${recording.getDuration()}) * 100) + '%'"
+                                 style="background-color: #2B486E;"
+                                 data-toggle="tooltip"
+                                 data-html="true"
+                                 th:attr="title='Start: ' + ${segment.startSecond} + 's End:' + ${segment.endSecond} + 's'"
+                                 th:data-timeline-id="${timeline.getId().toString()}"
+                                 th:data-segment-id="${segment.getId().toString()}"
+                                 onclick="openSidePanel(this)">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </th:block>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Panel lateral derecho -->
+<div id="sidePanel" class="side-panel">
+
+  <div class="modal-header header-sticky">
+    <h5 class="modal-title" id="sidePanelTitle">Detalle del Timeline</h5>
+    <span class="btn-close-icon" onclick="closeSidePanel()">
+      <i class="fa fa-times"></i>
+    </span>
+  </div>
+  <div class="side-panel-content">
+    <!-- Contenido inicial del panel lateral -->
+    <div id="timelineDetail">
+      <table id="timeline-detail-table">
+        <tbody>
+        <tr>
+          <td style="padding: 0.2rem 2rem;">
+            <div class="time-reference-bar" style="font-size: 0.8rem">
+              <div th:each="i : ${#numbers.sequence(0, recording.getDuration(), (recording.getDuration() < 14 ? 1 : recording.getDuration() / 14))}">
+                <div class="time-marker-line"
+                     th:style="'left: ' + (${i} / ${recording.getDuration()}) * 100 + '%; transform: translateX(-50%)'">
+                </div>
+              </div>
+              <div th:each="i : ${#numbers.sequence(0, recording.getDuration(), (recording.getDuration() < 7 ? 1 : recording.getDuration() / 7))}">
+                <div class="time-marker"
+                     th:style="'left: ' + (${i} / ${recording.getDuration()}) * 100 + '%; transform: translateX(-50%)'"
+                     th:text="${#numbers.formatDecimal(i / 60, 0, '0')} + ':' + ${#numbers.formatDecimal(i % 60, 0, '0')} + 'm'">
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 100%">
+            <div class="time-bar-container">
+              <div class="time-bar" id="time-bar-detail">
+
+              </div>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="time-control-bar">
+        <button class="btn btn-icon" id="backwardButton">
+          <i class="fa fa-backward"></i>
+        </button>
+        <button class="btn btn-icon" id="playButton">
+          <i class="fa fa-play"></i>
+        </button>
+        <button class="btn btn-icon" id="forwardButton">
+          <i class="fa fa-forward"></i>
+        </button>
+      </div>
+    </div>
+    <!-- Tab Bar -->
+    <ul class="nav nav-tabs" id="timelineTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="images-tab" data-coreui-toggle="tab" href="#images" role="tab" aria-controls="images" aria-selected="true">Imágenes</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="events-tab" data-coreui-toggle="tab" href="#events" role="tab" aria-controls="events" aria-selected="false">Eventos</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="timelineTabContent">
+      <div class="tab-pane fade show active mt-2" id="images" role="tabpanel" aria-labelledby="images-tab">
+        <div class="container-fluid my-2">
+          <!-- Paginación superior -->
+          <div class="d-flex justify-content-end mb-2">
+            <nav aria-label="Page navigation">
+              <ul class="pagination" id="image-pagination-top">
+              </ul>
+            </nav>
+          </div>
+          <div id="image-grid-container" class="position-relative" style="">
+
+            <!-- Spinner Container -->
+            <div id="spinner-container" class="position-absolute top-50 start-50 translate-middle justify-content-center align-items-center" style="width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 1000; display: none !important;">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3" id="image-grid">
+            </div>
+
+          </div>
+
+          <!-- Paginación inferior -->
+          <div class="d-flex justify-content-end mt-2">
+            <nav aria-label="Page navigation">
+              <ul class="pagination" id="image-pagination-bottom">
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <div class="tab-pane fade" id="events" role="tabpanel" aria-labelledby="events-tab">
+        <!-- Contenido de eventos -->
+      </div>
+    </div>
+</div>
+
+<!-- Modal para mostrar la imagen ampliada -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="background: linear-gradient(to left, #2FA473, #214c72);">
+        <button class="btn-close-icon" type="button" data-coreui-dismiss="modal" aria-label="Close" style="background: none; border: none">
+          <i class="fa fa-times" style="font-size: 1.5rem"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img id="expandedImage" class="img-fluid" src="" alt="Expanded Image" style="height: 100%; width: 100%; object-fit: contain; padding: 0.2rem">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para mostrar el GIF generado -->
+<div class="modal fade" id="gifModal" tabindex="-1" role="dialog" aria-labelledby="gifModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="background: linear-gradient(to left, #2FA473, #214c72);">
+        <button class="btn-close-icon" type="button" data-coreui-dismiss="modal" aria-label="Close" style="background: none; border: none">
+          <i class="fa fa-times" style="font-size: 1.5rem"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Loading spinner -->
+        <div id="loadingSpinner" class="text-center" style="display: none;">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+        <!-- GIF container -->
+        <div id="gifContainer" style="display: none;">
+          <img id="generatedGif" class="img-fluid" src="" alt="Generated GIF" style="height: 100%; width: 100%; object-fit: contain;">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="/vendors/jquery/jquery.js"></script>
+<script src="/vendors/datatables/jquery.dataTables.js"></script>
+<script src="/vendors/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="/vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
+<script src="/vendors/simplebar/js/simplebar.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://kit.fontawesome.com/c6ad53a8f6.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/js/loading.js"></script>
+
+<script th:inline="javascript">
+
+  const eventsToDetect = /*[[${recording.eventsToDetect}]]*/ [];
+
+  // Mapeo de eventos a descripciones y clases
+  const eventMap = {
+    'PHONE_DETECTED': { description: 'Phone Detected', badgeClass: 'badge-phone' },
+    'MOUSE_DETECTED': { description: 'Mouse Detected', badgeClass: 'badge-mouse' },
+    'KEYBOARD_DETECTED': { description: 'Keyboard Detected', badgeClass: 'badge-keyboard' },
+    'MONITOR_DETECTED': { description: 'Monitor Detected', badgeClass: 'badge-monitor' },
+    'LAPTOP_DETECTED': { description: 'Laptop Detected', badgeClass: 'badge-laptop' },
+    'NOT_FACE_DETECTED': { description: 'No Face Detected', badgeClass: 'badge-not-face' },
+    'MULTIPLE_FACE_DETECTED': { description: 'Multiple Faces Detected', badgeClass: 'badge-multiple-face' },
+    'HEAD_POSE_LEFT': { description: 'Head Pose: Left', badgeClass: 'badge-head-pose-left' },
+    'HEAD_POSE_RIGHT': { description: 'Head Pose: Right', badgeClass: 'badge-head-pose-right' },
+    'HEAD_POSE_UP': { description: 'Head Pose: Up', badgeClass: 'badge-head-pose-up' },
+    'HEAD_POSE_DOWN': { description: 'Head Pose: Down', badgeClass: 'badge-head-pose-down' },
+    'HEAD_POSE_FORWARD': { description: 'Head Pose: Forward', badgeClass: 'badge-head-pose-forward' },
+    'HEAD_POSE_UNKNOWN': { description: 'Head Pose: Unknown', badgeClass: 'badge-head-pose-unknown' },
+    'SAFE': { description: 'Safe', badgeClass: 'badge-safe' }
+  };
+
+  // Agregar badges a la lista de eventos
+  $(document).ready(function() {
+    const $eventList = $('#event-list');
+
+    if (eventsToDetect.length === 0) {
+      $eventList.append('<div class="badge badge-info">No hay eventos a detectar disponibles</div>');
+    } else {
+      eventsToDetect.forEach(function(event) {
+        const eventData = eventMap[event] || { description: event, badgeClass: 'badge-secondary' };
+        $eventList.append(`<span class="badge ${eventData.badgeClass}">${eventData.description}</span> `);
+      });
+    }
+  });
+</script>
+
+<script th:inline="javascript">
+  document.addEventListener('DOMContentLoaded', function () {
+
+    const fraudPercentage = /*[[${recording.getFraudPercentage()}]]*/ 0;
+    const fraudIcon = document.getElementById('fraud-icon');
+    const fraudProgressBar = document.getElementById('fraud-progress-bar');
+
+    let colorClass;
+    let backgroundColor;
+
+    if (fraudPercentage < 25) {
+      colorClass = 'color-low';
+      backgroundColor = 'background-color-low';
+    } else if (fraudPercentage < 50) {
+      colorClass = 'color-medium';
+      backgroundColor = 'background-color-medium';
+    } else if (fraudPercentage < 75) {
+      colorClass = 'color-high';
+      backgroundColor = 'background-color-high';
+    } else {
+      colorClass = 'color-very-high';
+      backgroundColor = 'background-color-very-high';
+    }
+
+    fraudProgressBar.classList.add(backgroundColor);
+    fraudIcon.classList.add(colorClass);
+  });
+</script>
+
+<script th:inline="javascript">
+  // Bar.js Bar Chart
+  const ctxBar = document.getElementById('barChart').getContext('2d');
+  const barChartLabels = [[${pieChartLabels}]];
+  const barChartData = [[${pieChartData}]];
+
+  // Ordenar las etiquetas y los datos en orden decreciente basado en los datos
+  const sortedData = barChartData.map((value, index) => ({ label: barChartLabels[index], value }));
+  sortedData.sort((a, b) => b.value - a.value);
+
+  const sortedLabels = sortedData.map(item => item.label);
+  const sortedDataValues = sortedData.map(item => item.value);
+
+  const blueShades = [
+    '#2B486E', // Color específico
+    '#1E3A5F', // Tonos adicionales
+    '#345A90',
+    '#4A6FB1',
+    '#6094D2',
+    '#7BB8F3'
+  ];
+
+  if (sortedLabels.length === 0) {
+    // No hay datos para el gráfico de barras
+    const barChartNoData = new Chart(ctxBar, {
+      type: 'bar',
+      data: {
+        labels: ['No hay datos disponibles'],
+        datasets: [{
+          label: 'Eventos',
+          data: [1], // Cualquier dato, ya que no se mostrará
+          backgroundColor: ['#ccc'], // Color de fondo gris claro
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: 'y', // Configura el gráfico como horizontal
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: false,
+            text: 'No hay datos disponibles'
+          }
+        }
+      }
+    });
+  } else {
+    // Hay datos disponibles, mostrar gráfico de barras horizontales
+    const barChart = new Chart(ctxBar, {
+      type: 'bar',
+      data: {
+        labels: sortedLabels,
+        datasets: [{
+          label: 'Eventos',
+          data: sortedDataValues,
+          backgroundColor: blueShades.slice(0, sortedLabels.length), // Asegura que el número de colores sea igual al número de datos
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: 'y', // Configura el gráfico como horizontal
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: false,
+            text: 'Cantidad de Eventos por Tipo de Fraude'
+          }
+        }
+      }
+    });
+  }
+
+  // Chart.js Radar Chart
+  const ctxRadar = document.getElementById('radarChart').getContext('2d');
+  const radarChartLabels = [[${radarChartLabels}]];
+  const radarChartData = [[${radarChartData}]];
+
+  if (radarChartLabels.length === 0) {
+
+    falseLabels = ["HEAD_POSE_DOWN", "HEAD_POSE_FORWARD", "HEAD_POSE_LEFT", "HEAD_POSE_RIGHT", "HEAD_POSE_UNKNOWN", "HEAD_POSE_UP"];
+    falseData = [0, 0, 0, 0, 0, 0];
+    // No hay datos para el gráfico radar
+    const radarChartNoData = new Chart(ctxRadar, {
+      type: 'radar',
+      data: {
+        labels: falseLabels,
+        datasets: [{
+          label: "No hay Datos disponibles",
+          data: falseData, // Cualquier dato, ya que no se mostrará
+          backgroundColor: ['rgba(0, 0, 0, 0.1)'], // Color de fondo gris claro
+          borderColor: ['rgba(0, 0, 0, 0.5)'], // Borde gris claro
+          pointBackgroundColor: ['rgba(0, 0, 0, 0.5)'],
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgba(0, 0, 0, 0.8)'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: false,
+            text: 'No hay datos disponibles'
+          }
+        }
+      }
+    });
+  }
+  else if (radarChartLabels.length <= 3) {
+    const ctxRadar = document.getElementById('radarChart').getContext('2d');
+    //ctxRadar.canvas.height = '100%'; // Ajusta la altura según sea necesario
+
+    const radarChart = new Chart(ctxRadar, {
+      type: 'bar', // Tipo de gráfico de barras
+      data: {
+        labels: radarChartLabels,
+        datasets: [{
+          label: 'Tendencia de la Mirada',
+          data: radarChartData,
+          backgroundColor: 'rgb(33, 76, 114)', // Color de fondo de las barras
+          borderColor: 'rgba(54, 162, 235, 1)', // Color del borde de las barras
+          borderWidth: 1, // Ancho del borde de las barras
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: false,
+            text: 'Tendencia de la Mirada'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true // Iniciar el eje Y desde 0
+          }
+        }
+      }
+    });
+
+  } else {
+    // Caso normal con 3 o más etiquetas
+    const radarChart = new Chart(ctxRadar, {
+      type: 'radar',
+      data: {
+        labels: radarChartLabels,
+        datasets: [{
+          label: 'Tendencia de la Mirada',
+          data: radarChartData,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgba(54, 162, 235, 1)'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: false,
+            text: 'Tendencia de la Mirada'
+          }
+        }
+      }
+    });
+  }
+</script>
+
+<script>
+  $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip({
+      template: '<div class="tooltip custom-tooltip" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+    });
+  });
+</script>
+
+<script th:inline="javascript">
+
+  const timelines = /*[[ ${recording.getTimelines()} ]]*/ 0;
+  const recordingDuration = /*[[ ${recording.getDuration()} ]]*/ 0;
+  let currentPage = 0;
+  const pageSize = 50; // Puedes ajustar el tamaño de la página según sea necesario
+  let totalPages = 0; // Total de páginas obtenidas del servidor
+
+  async function openSidePanel(segmentElement) {
+    const sidePanel = document.getElementById("sidePanel");
+    currentPage = 0; // Restablecer la página actual al abrir el panel lateral
+    totalPages = 0; // Restablecer el total de páginas al abrir el panel lateral
+    sidePanel.style.width = getSidePanelWidth();
+    resizeListenerActive = true;
+
+    // Obtener el timeline correspondiente al segmento seleccionado
+    const recordingId = /*[[ ${recording.getId().toString()} ]]*/ 0;
+    const timelineId = segmentElement.getAttribute("data-timeline-id");
+    const segmentId = segmentElement.getAttribute("data-segment-id");
+    const selectedTimeline = timelines.find(timeline => timeline.id === timelineId);
+    const selectedSegment = selectedTimeline.segments.find(segment => segment.id === segmentId);
+    let selectedSegmentIndex = selectedTimeline.segments.findIndex(segment => segment.id === segmentId);
+
+    // Actualizar el título del panel lateral con el tipo de evento
+    document.getElementById("sidePanelTitle").innerText = `Timeline - ${selectedTimeline.eventType}`;
+
+    // Actualizar la barra de tiempo en el panel lateral
+    const timeBarDetail = document.getElementById("time-bar-detail");
+    timeBarDetail.innerHTML = ''; // Limpiar contenido previo
+
+    // Agregar los segmentos al detalle de tiempo
+    selectedTimeline.segments.forEach(segment => {
+      const newSegmentElement = document.createElement("div");
+      newSegmentElement.className = "segment";
+      newSegmentElement.setAttribute("data-timeline-id", timelineId);
+      newSegmentElement.setAttribute("data-segment-id", segment.id);
+      const segmentWidth = ((segment.endSecond - segment.startSecond + 1) / recordingDuration) * 100;
+      newSegmentElement.style.cssText = `left: ${(segment.startSecond / recordingDuration) * 100}%; width: ${segmentWidth}%; background-color: #2B486E;`;
+      newSegmentElement.setAttribute("data-toggle", "tooltip");
+      newSegmentElement.setAttribute("data-html", "true");
+      newSegmentElement.setAttribute("title", `Start: ${segment.startSecond}s End: ${segment.endSecond}s`);
+      newSegmentElement.onclick = function() {
+        openSidePanel(newSegmentElement);
+      };
+
+      // Si este es el segmento seleccionado, agregar la clase 'active'
+      if (segment.id === selectedSegment.id) {
+        newSegmentElement.classList.add('segment-active');
+      }
+
+      timeBarDetail.appendChild(newSegmentElement);
+    });
+
+    // Generar marcas de tiempo
+    //generateTimeMarkers(recordingDuration);
+
+    // Mostrar el panel lateral
+    sidePanel.classList.add("active");
+
+    // Actualizar la pestaña de imágenes con las imágenes del segmento seleccionado
+    const imageGrid = document.getElementById("image-grid");
+    imageGrid.innerHTML = ''; // Limpiar contenido previo
+
+    await loadImages(recordingId, timelineId, segmentId, currentPage);
+
+    // Configurar los botones de navegación
+    document.getElementById("backwardButton").onclick = function() {
+      if (selectedSegmentIndex > 0) {
+        console.log('Going back to previous segment');
+        selectedSegmentIndex--;
+        const previousSegment = selectedTimeline.segments[selectedSegmentIndex];
+        const previousSegmentElement = document.querySelector(`[data-timeline-id="${timelineId}"][data-segment-id="${previousSegment.id}"]`);
+        if (previousSegmentElement) {
+          openSidePanel(previousSegmentElement);
+        }
+      }
+    };
+
+    document.getElementById("forwardButton").onclick = function() {
+      if (selectedSegmentIndex < selectedTimeline.segments.length - 1) {
+        console.log('Going forward to next segment');
+        selectedSegmentIndex++;
+        const nextSegment = selectedTimeline.segments[selectedSegmentIndex];
+        const nextSegmentElement = document.querySelector(`[data-timeline-id="${timelineId}"][data-segment-id="${nextSegment.id}"]`);
+        if (nextSegmentElement) {
+          openSidePanel(nextSegmentElement);
+        }
+      }
+    };
+
+    document.getElementById("playButton").onclick = async function () {
+      // Mostrar el spinner de carga
+      document.getElementById('loadingSpinner').style.display = 'block';
+      document.getElementById('gifContainer').style.display = 'none';
+
+      // Mostrar el modal
+      const modal = new coreui.Modal(document.getElementById('gifModal'));
+      modal.show();
+
+      try {
+        // Solicitar el GIF al backend
+        const response = await fetch(`/recordings/${recordingId}/timelines/${timelineId}/segments/${segmentId}/gif`);
+        const base64GifUrl = await response.text();
+
+        // Mostrar el GIF en el modal
+        const gif = document.getElementById('generatedGif');
+        gif.src = base64GifUrl;
+
+        console.log('GIF loaded:', gif.src);
+
+        gif.onload = function() {
+          // Ocultar el spinner de carga y mostrar el GIF
+          document.getElementById('loadingSpinner').style.display = 'none';
+          document.getElementById('gifContainer').style.display = 'block';
+        };
+
+        gif.onerror = function() {
+          // Manejo de errores si el GIF no se carga
+          document.getElementById('loadingSpinner').style.display = 'none';
+          alert('Error loading GIF');
+        };
+      } catch (error) {
+        console.error('Error fetching GIF:', error);
+        document.getElementById('loadingSpinner').style.display = 'none';
+        alert('Error loading GIF');
+      }
+    };
+
+  }
+
+  async function getSegmentImages(recordingId, timelineId, segmentId) {
+    try {
+      console.log('Fetching segment images...');
+      console.log('Recording ID:', recordingId);
+        console.log('Timeline ID:', timelineId);
+        console.log('Segment ID:', segmentId);
+      const response = await fetch(`/recordings/${recordingId}/timelines/${timelineId}/segments/${segmentId}/gif`);
+      if (response.ok) {
+        return await response;
+      } else {
+        console.error('Failed to fetch segment images');
+        return [];
+      }
+    } catch (error) {
+      console.error('Error fetching segment images', error);
+      return [];
+    }
+  }
+
+  function generateTimeMarkers(duration) {
+    const timeReferenceBar = document.getElementById("timeReferenceBar");
+    timeReferenceBar.innerHTML = ''; // Limpiar marcas de tiempo previas
+
+    // Crear 8 marcas de tiempo
+    const numMarkers = 8;
+    const interval = duration / (numMarkers - 1);
+
+    for (let i = 0; i < numMarkers; i++) {
+      const time = Math.round(i * interval);
+      console.log(`Generating marker for time: ${time} seconds`);
+      const marker = document.createElement("div");
+      marker.className = "time-marker";
+      marker.style.left = `${(time / duration) * 100}%`;
+      marker.innerText = formatTime(time);
+      timeReferenceBar.appendChild(marker);
+    }
+  }
+
+  function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return minutes > 0 ? `${minutes}m` : `${secs < 10 ? '0' : ''}${secs}s`;
+  }
+
+  async function loadImages(recordingId, timelineId, segmentId, page) {
+
+    // Mostrar el spinner
+    const spinnerContainer = document.getElementById("spinner-container");
+    spinnerContainer.style.display = 'flex';
+
+    // Limpiar el contenedor de imágenes antes de cargar nuevas imágenes
+    const imageGrid = document.getElementById("image-grid");
+    imageGrid.innerHTML = ''; // Limpiar el contenido previo
+
+    // Imprimir mensaje de loading en la consola
+    console.log('Loading images...');
+
+    try {
+      const response = await fetch(`/recordings/${recordingId}/timelines/${timelineId}/segments/${segmentId}/images?page=${page}&size=${pageSize}`);
+      if (response.ok) {
+        const imagesPage = await response.json();
+        console.log('Images loaded successfully:', imagesPage);
+        renderImages(imagesPage.content);
+        currentPage = imagesPage.number;
+        totalPages = imagesPage.totalPages;
+        renderPagination(recordingId, timelineId, segmentId); // Renderizar la paginación
+      } else {
+        console.error('Failed to fetch segment images');
+      }
+    } catch (error) {
+      console.error('Error fetching segment images', error);
+    } finally {
+      spinnerContainer.style.display = 'none';
+      // Imprimir mensaje cuando se complete la carga
+      console.log('Image loading complete.');
+    }
+  }
+
+  function renderPagination(recordingId, timelineId, segmentId) {
+    const paginationTop = document.getElementById("image-pagination-top");
+    const paginationBottom = document.getElementById("image-pagination-bottom");
+
+    const visiblePages = 5; // Número de páginas visibles en la paginación
+    const maxPagesBeforeCurrent = Math.floor(visiblePages / 2);
+    const maxPagesAfterCurrent = visiblePages - maxPagesBeforeCurrent - 1;
+
+    // Función para crear la paginación
+    function createPagination(pagination) {
+      pagination.innerHTML = ''; // Limpiar paginación previa
+
+      // Crear el botón de página anterior
+      const prevItem = document.createElement('li');
+      prevItem.className = 'page-item';
+      if (currentPage === 0) {
+        prevItem.classList.add('disabled'); // Desactivar el botón si estamos en la primera página
+      }
+      const prevLink = document.createElement('a');
+      prevLink.className = 'page-link';
+      prevLink.href = '#';
+      prevLink.innerText = 'Previous';
+      prevLink.onclick = function(event) {
+        if (currentPage > 0) {
+          event.preventDefault();
+          loadImages(recordingId, timelineId, segmentId, currentPage - 1);
+        }
+      };
+      prevItem.appendChild(prevLink);
+      pagination.appendChild(prevItem);
+
+      // Determinar el rango de páginas a mostrar
+      let startPage = Math.max(0, currentPage - maxPagesBeforeCurrent);
+      let endPage = Math.min(totalPages - 1, currentPage + maxPagesAfterCurrent);
+
+      // Ajustar si hay menos de visiblePages páginas disponibles
+      if (endPage - startPage + 1 < visiblePages) {
+        if (startPage === 0) {
+          endPage = Math.min(totalPages - 1, visiblePages - 1);
+        } else if (endPage === totalPages - 1) {
+          startPage = Math.max(0, totalPages - visiblePages);
+        }
+      }
+
+      // Crear los botones de páginas
+      if (startPage > 0) {
+        const firstPageItem = document.createElement('li');
+        firstPageItem.className = 'page-item';
+        const firstPageLink = document.createElement('a');
+        firstPageLink.className = 'page-link';
+        firstPageLink.href = '#';
+        firstPageLink.innerText = '1';
+        firstPageLink.onclick = function(event) {
+          event.preventDefault();
+          loadImages(recordingId, timelineId, segmentId, 0);
+        };
+        firstPageItem.appendChild(firstPageLink);
+        pagination.appendChild(firstPageItem);
+
+        const ellipsisItem = document.createElement('li');
+        ellipsisItem.className = 'page-item disabled';
+        const ellipsisLink = document.createElement('span');
+        ellipsisLink.className = 'page-link';
+        ellipsisLink.innerText = '...';
+        ellipsisItem.appendChild(ellipsisLink);
+        pagination.appendChild(ellipsisItem);
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        const pageItem = document.createElement('li');
+        pageItem.className = 'page-item';
+        if (i === currentPage) {
+          pageItem.classList.add('active');
+        }
+        const pageLink = document.createElement('a');
+        pageLink.className = 'page-link';
+        pageLink.href = '#';
+        pageLink.innerText = i + 1;
+        pageLink.onclick = function(event) {
+          if (i !== currentPage) {
+            event.preventDefault();
+            loadImages(recordingId, timelineId, segmentId, i);
+          }
+        };
+        pageItem.appendChild(pageLink);
+        pagination.appendChild(pageItem);
+      }
+
+      if (endPage < totalPages - 1) {
+        const ellipsisItem = document.createElement('li');
+        ellipsisItem.className = 'page-item disabled';
+        const ellipsisLink = document.createElement('span');
+        ellipsisLink.className = 'page-link';
+        ellipsisLink.innerText = '...';
+        ellipsisItem.appendChild(ellipsisLink);
+        pagination.appendChild(ellipsisItem);
+
+        const lastPageItem = document.createElement('li');
+        lastPageItem.className = 'page-item';
+        const lastPageLink = document.createElement('a');
+        lastPageLink.className = 'page-link';
+        lastPageLink.href = '#';
+        lastPageLink.innerText = totalPages;
+        lastPageLink.onclick = function(event) {
+          event.preventDefault();
+          loadImages(recordingId, timelineId, segmentId, totalPages - 1);
+        };
+        lastPageItem.appendChild(lastPageLink);
+        pagination.appendChild(lastPageItem);
+      }
+
+      // Crear el botón de página siguiente
+      const nextItem = document.createElement('li');
+      nextItem.className = 'page-item';
+      if (currentPage >= totalPages - 1) {
+        nextItem.classList.add('disabled'); // Desactivar el botón si estamos en la última página
+      }
+      const nextLink = document.createElement('a');
+      nextLink.className = 'page-link';
+      nextLink.href = '#';
+      nextLink.innerText = 'Next';
+      nextLink.onclick = function(event) {
+        if (currentPage < totalPages - 1) {
+          event.preventDefault();
+          loadImages(recordingId, timelineId, segmentId, currentPage + 1);
+        }
+      };
+      nextItem.appendChild(nextLink);
+      pagination.appendChild(nextItem);
+    }
+
+    // Actualizar ambas paginaciones
+    createPagination(paginationTop);
+    createPagination(paginationBottom);
+  }
+
+  function renderImages(imageBase64List) {
+    const imageGrid = document.getElementById("image-grid");
+
+    // Limpiar el contenedor de imágenes antes de agregar nuevas imágenes
+    imageGrid.innerHTML = ''; // Limpiar el contenido previo
+
+    // Crear y agregar imágenes al grid
+    imageBase64List.forEach((base64Image, index) => {
+      const colDiv = document.createElement('div');
+      colDiv.classList.add('col-md-4'); // Ajustar el tamaño de la columna según sea necesario
+
+      // Crear y agregar la imagen
+      const img = document.createElement('img');
+      img.src = `data:image/png;base64,${base64Image}`;
+      img.alt = `Segment Image ${index + 1}`;
+      img.classList.add('img-thumbnail', 'clickable-image', 'image-card');
+      img.onclick = function() {
+        expandImage(base64Image);
+      };
+
+      colDiv.appendChild(img);
+      imageGrid.appendChild(colDiv);
+    });
+  }
+
+  function expandImage(imageBase64) {
+    const expandedImage = document.getElementById("expandedImage");
+    expandedImage.src = `data:image/png;base64, ${imageBase64}`;
+
+    const imageModal = new coreui.Modal(document.getElementById('imageModal'));
+    imageModal.show();
+  }
+
+  function closeSidePanel() {
+    document.getElementById("sidePanel").style.width = "0";
+    resizeListenerActive = false;
+  }
+
+  function getSidePanelWidth() {
+    const width = window.innerWidth;
+    if (width <= 576) {
+      return "100%";
+    } else if (width <= 768) {
+      return "80%";
+    } else {
+      return "60%";
+    }
+  }
+
+  function adjustSidePanelWidth() {
+    if (resizeListenerActive) {
+      document.getElementById("sidePanel").style.width = getSidePanelWidth();
+    }
+  }
+
+  window.addEventListener("resize", adjustSidePanelWidth);
+
+</script>
+
+</body>
+</html>

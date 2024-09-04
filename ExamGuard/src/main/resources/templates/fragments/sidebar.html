@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sidebar</title>
+</head>
+
+<body>
+<div class="sidebar sidebar-dark sidebar-fixed" id="sidebar" th:fragment="sidebar">
+
+    <div class="sidebar-brand">
+        <img class="sidebar-brand-full logo" src="/assets/img/logos/examguard-logo-white.svg" width="118" height="46" alt="Exam Guard Logo">
+        <img class="sidebar-brand-narrow logo" src="/assets/img/logos/examguard-logo-narrow-white.svg" width="32" height="32" alt="Exam Guard Logo">
+    </div>
+
+    <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
+        <li class="nav-item"><a class="nav-link" href="/home">
+            <i class="fas fa-home nav-icon"></i> Home</a>
+        </li>
+
+        <li class="nav-title">Folders</li>
+
+        <li class="nav-item"><a class="nav-link" href="/folders">
+            <i class="fas fa-folder nav-icon"></i> Folders List</a>
+        </li>
+
+        <li class="nav-title">Recordings</li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="/recordings">
+                <i class="fas fa-video nav-icon"></i> Recordings List
+            </a>
+        </li>
+
+        <li class="nav-title">Students</li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="/students">
+                <i class="fas fa-user nav-icon"></i> Students List
+            </a>
+        </li>
+
+        <li class="nav-title">Logout</li>
+
+        <li class="nav-item"><a class="nav-link" href="/logout">
+            <i class="fas fa-sign-out-alt nav-icon"></i>Logout</a>
+        </li>
+    </ul>
+    <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>
+</div>
+</body>
+
+</html>

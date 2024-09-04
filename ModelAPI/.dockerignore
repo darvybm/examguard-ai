@@ -1,0 +1,6 @@
+# Ignorar el entorno virtual
+venv/
+.venv/
+
+# Ignorar la carpeta de grabaciones
+recordings/

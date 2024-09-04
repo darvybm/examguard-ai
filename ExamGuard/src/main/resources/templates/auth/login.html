@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet"  type='text/css'>
+    <link href="css/login-style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="login-page">
+    <img src="assets/img/backgrounds/banner-background.png" alt="Banner Background" class="banner-background">
+    <div class="login-container">
+        <img src="assets/img/logos/examguard-logo.svg" alt="Exam Guard IA Logo" class="logo">
+        <div class="card">
+            <h2 class="title">Login</h2>
+            <!-- Formulario de inicio de sesión -->
+            <form action="/login" method="post">
+
+                <div th:if="${param.error}" class="form-error">
+                    Invalid username and password.
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="input-label">Email</label>
+                    <input type="text" id="email" name="email" class="form-control input-field" placeholder="Ingrese su correo electrónico">
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="input-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-control input-field" placeholder="Ingrese su contraseña">
+                </div>
+
+                <div class="mb-2 mt-2 form-check">
+                    <input type="checkbox" id="rememberMe" name="remember-me" class="form-check-input">
+                    <label for="rememberMe" class="form-check-label">Recordarme</label>
+                </div>
+
+                <button type="submit" class="login-btn">Iniciar sesión</button>
+
+            </form>
+            <a href="/forgot-password" class="forgot-password"></a>
+        </div>
+        <p class="not-account">¿Aún no tienes cuenta? <a href="/register" class="register-link">Regístrate aquí</a></p>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer.html :: footer}">...</div>
+
+<script src="https://kit.fontawesome.com/c6ad53a8f6.js" crossorigin="anonymous"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const emailField = document.getElementById('email');
+        const passwordField = document.getElementById('password');
+        const togglePassword = document.getElementById('togglePassword');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        emailField.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Previene el comportamiento por defecto
+                passwordField.focus(); // Mueve el foco al campo de contraseña
+            }
+        });
+
+        passwordField.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Previene el comportamiento por defecto
+                document.querySelector('.login-btn').click(); // Simula el click en el botón de inicio de sesión
+            }
+        });
+
+        togglePassword.addEventListener('click', function() {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

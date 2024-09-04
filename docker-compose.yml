@@ -1,0 +1,55 @@
+version: '3.9'
+
+networks:
+  examguard-network:
+
+services:
+  examguard-app:
+    container_name: examguard-app
+    build: ./ExamGuard
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+        - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+        - JWT_EXPIRATION_TIME=${JWT_EXPIRATION_TIME}
+        - FLASK_API_URL=${FLASK_API_URL}
+        - SPRING_DATA_MONGODB_URI=${SPRING_DATA_MONGODB_URI}
+        - SENDGRID_SECRET_KEY=${SENDGRID_SECRET_KEY}
+        - SENDGRID_MAIL_SENDER=${SENDGRID_MAIL_SENDER}
+    depends_on:
+        - mongo
+        - flask-api
+    networks:
+        - examguard-network
+
+  flask-api:
+    container_name: flask-api
+    build: ./ModelAPI
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    networks:
+      - examguard-network
+    volumes:
+      - recordings-data:/app/ModelAPI/recordings
+
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    ports:
+        - "27017:27017"
+    networks:
+      - examguard-network
+    volumes:
+        - mongo-data:/data/db
+
+volumes:
+  recordings-data:
+  mongo-data:
+

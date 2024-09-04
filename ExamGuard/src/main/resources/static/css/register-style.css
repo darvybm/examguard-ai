@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.register-page {
+    height: auto;
+    background-color: #EEEEEE;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.register-container {
+    text-align: center;
+}
+
+.logo {
+    height: 5em;
+    margin-top: 1em
+}
+
+.card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 1em 2em 1.2em 2em;
+    margin: 2em;
+    width: calc(20vw + 15em);
+    border: none;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Agrega una sombra */
+}
+
+
+.title {
+    color: #2B486E;
+    font-size: 2.8em;
+    font-weight: 800;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.google-btn {
+    background-color: #EEEEEE;
+    color: #2B486E;
+    height: 3.5em;
+    border-radius: 10px;
+    border: none;
+    padding: 10px 20px;
+    margin: 20px 0;
+    cursor: pointer;
+}
+
+.google-logo {
+    width: 2em;
+    margin-right: 10px;
+}
+
+.or {
+    color: #2B486E;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.input-label {
+    color: #2B486E;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    display: block;
+    text-align: left;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #EEEEEE;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    height: 3.5em;
+    background-color: #EEEEEE; /* Cambia el color de fondo del input */
+}
+
+.input-field::placeholder {
+    color: gray; /* Cambia el color del placeholder */
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgb(43, 72, 110, 0.25); /* Cambia el color aquí */
+    border-color: #2B486E; /* Opcional, cambia el color del borde */
+}
+
+.register-btn {
+    width: 100%;
+    height: 3.5em;
+    background-color: #2B486E;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+
+.have-account {
+    color: #2B486E;
+    font-size: 1.2em;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    padding: 1.2em;
+}
+
+.vector-container {
+    height: 100%;
+}
+
+.vector {
+    position: absolute;
+    height: 100%; /* Ajustar la altura al 100% del contenedor padre */
+    width: 15rem;
+    left: 0;
+    top: 0;
+    z-index: 0;
+}
+
+.banner-background {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    opacity: 0.2;
+    z-index: -1;
+}
+
+.form-error {
+    color: #bd5450;
+    font-size: 0.8em;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 576px) {
+    .logo {
+        height: 4em;
+    }
+
+    .title {
+        font-size: 2em;
+    }
+
+    .forgot-password {
+        font-size: 1em;
+    }
+
+    .not-account {
+        font-size: 1em;
+    }
+}

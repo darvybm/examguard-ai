@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <base href="./">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+  <title>Folders</title>
+  <meta name="msapplication-TileColor" content="#ffffff">
+
+  <!--styles-->
+  <link rel="stylesheet" href="/vendors/simplebar/css/simplebar.css">
+  <link rel="stylesheet" href="/css/vendors/simplebar.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" type="text/css"/>
+  <link rel="stylesheet" href="/vendors/datatables/dataTables.bootstrap4.min.css">
+
+  <style>
+    .btn-create-folder {
+      background-color: #2B486E;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 1rem;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-create-folder i {
+      margin-right: 8px;
+      height: 1.5rem;
+      width: auto;
+    }
+
+    .btn-create-folder:hover {
+      background-color: #1F3553;
+      color: white;
+    }
+
+    .card-folder {
+      height: 14rem;
+      background-color: #FFFFFF;
+      border-radius: 0.5rem;
+      border-left: solid 0.5rem #2B486E;
+      box-shadow: 0 0 10px rgba(43, 72, 110, 0.4);
+      margin-bottom: 20px;
+      padding: 20px;
+    }
+
+    .card-folder:hover {
+      transform: scale(1.03);
+      cursor: pointer;
+    }
+
+    .card-folder-header {
+      color: #2B486E;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+
+    .card-folder-header {
+      white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+      overflow: hidden; /* Oculta el texto que sobresale */
+      text-overflow: ellipsis; /* Añade puntos suspensivos (...) al final del texto truncado */
+      flex: 1; /* Asegura que el nombre del folder ocupe el espacio restante */
+    }
+
+    .card-folder-description {
+      color: #7B8BB3;
+      margin-bottom: 20px;
+      height: 4.5rem;
+      max-height: 4.5rem;
+      overflow: hidden; /* Asegura que el contenido adicional no sea visible */
+      text-overflow: ellipsis; /* Agrega los puntos suspensivos (...) */
+      display: -webkit-box;
+      -webkit-line-clamp: 3; /* Número de líneas que se muestran antes de los puntos suspensivos */
+      -webkit-box-orient: vertical;
+      white-space: normal; /* Permite que el texto se envuelva */
+    }
+
+
+    .recordings-count {
+      color: #2B486E;
+      font-weight: bold;
+    }
+
+    .progress-container {
+      display: flex;
+      align-items: center; /* Alinear verticalmente los elementos */
+    }
+
+    .progress {
+      flex-grow: 1;
+      height: 12px;
+      background-color: #2B486E;
+      border-radius: 6px;
+      margin-right: 10px; /* Espaciado entre la barra de progreso y el texto */
+    }
+
+    .progress-bar {
+      background-color: #00A7FF;
+      border-radius: 5px;
+      height: 100%;
+    }
+
+    .fraud-percentage {
+      color: #2B486E;
+      font-weight: bold;
+      min-width: 50px; /* Mínimo ancho para el texto del porcentaje, ajustable */
+      text-align: right; /* Alinea el texto a la derecha */
+    }
+
+    .section-divider {
+      border-top: 1px solid #2B486E;
+      margin: 10px 0;
+      width: 100%;
+    }
+
+    /* Panel lateral derecho */
+    .side-panel {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      right: 0;
+      background-color: white;
+      overflow-x: hidden;
+      transition: 0.25s;
+      padding-top: 60px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .side-panel-content {
+      padding: 2rem;
+    }
+
+    .side-panel .modal-header {
+      background: linear-gradient(to left, #2FA473, #214c72);
+      color: white;
+      height: 3.5rem;
+      padding: 0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .side-panel .modal-title {
+      font-size: 1.5rem;
+    }
+
+    .form-control {
+      border: none;
+      background-color: #f0f0f0; /* Fondo blanco grisáceo */
+      box-shadow: none;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 1rem;
+      color: #333;
+      outline: none;
+    }
+
+    .form-control:focus {
+      background-color: #f0f0f0;
+      box-shadow: none !important; /* Eliminar la sombra */
+    }
+
+    /* Estilos para el icono de cerrar */
+    .btn-close-icon {
+      position: absolute;
+      right: 20px;
+      font-size: 2rem;
+      color: #d7ffed; /* Color de tu elección */
+      cursor: pointer;
+    }
+
+    .btn-close-icon:hover {
+      color: #1F3553; /* Color de hover de tu elección */
+    }
+
+    /* Estilos para los botones de acción en la card-folder-header */
+    .card-folder-header .action-buttons {
+      margin-left: auto;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .card-folder-header .action-buttons .btn {
+      background: none;
+      border: none;
+      color: #2B486E;
+      cursor: pointer;
+    }
+
+    .card-folder-header .action-buttons .btn:hover {
+      color: #FAFAFA;
+      background: #2B486E;
+    }
+
+    .card-folder-header .action-buttons .btn i {
+      font-size: 1.2rem;
+    }
+
+    .background-color-low {
+      background-color: #2FA473 !important;
+    }
+
+    .background-color-medium {
+      background-color: #ffdd00 !important;
+    }
+
+    .background-color-high {
+      background-color: #f6a000 !important;
+    }
+
+    .background-color-very-high {
+      background-color: #c45353 !important;
+    }
+
+  </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/loading.html :: loading}">...</div>
+
+<div th:replace="~{fragments/sidebar.html :: sidebar}">...</div>
+
+<div class="wrapper d-flex flex-column min-vh-100 bg-light">
+
+  <div th:replace="~{fragments/header.html :: header}">...</div>
+
+  <div id="banner" class="mb-2">
+    <h1 class="display-5">Folders</h1>
+  </div>
+
+  <div class="body flex-grow-1 px-3">
+
+    <div class="card mt-3">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <i class="fas fa-table me-1"></i>
+          Folder List
+        </div>
+        <button class="btn-create-folder" onclick="openSidePanel('create', null)" style="display: flex; align-items: center">
+          <i class="fas fa-plus" style="font-size: 1.5rem; padding: 0 10px;"></i>
+          Crear Folder
+        </button>
+      </div>
+      <div class="card-body" style="background-color: #EEEEEE">
+        <div class="row">
+          <!-- Verificar si la lista de folders está vacía -->
+          <div th:if="${folders.isEmpty()}" class="col-12 text-center py-4">
+            <p>No hay folders disponibles</p>
+          </div>
+
+          <!-- Iterar sobre los folders si hay datos -->
+          <div th:each="folder : ${folders}" class="col-lg-4 col-md-6 mb-2">
+            <div class="card-folder" th:data-folder-id="${folder.id}">
+              <div class="card-folder-header">
+                <div class="d-flex align-items-center">
+                  <img th:src="@{/assets/img/icons/folder-icon.svg}" alt="Folder Icon" style="height: 1.5rem; margin-right: 10px;">
+                  <span class="folder-name" th:text="${folder.name}" style="">Nombre del Folder</span>
+                </div>
+                <div class="action-buttons">
+                  <button class="btn edit-folder-btn" th:data-folder-id="${folder.id}">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                  <button class="btn delete-folder-btn" th:data-folder-id="${folder.id}">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="section-divider"></div>
+              <div class="card-folder-description">
+                <span th:text="${folder.description}">Descripción del Folder</span>
+              </div>
+              <div class="recordings-count">
+                <span th:text="${folder.recordings.size()} + ' Recordings'">10 Recordings</span>
+              </div>
+              <div class="progress-container">
+                <div class="progress">
+                  <div class="progress-bar"
+                       th:style="'width: ' + ${folder.getAverageFraud()} + '%'"
+                       th:classappend="${folder.getAverageFraud() < 25 ? 'background-color-low'
+                           : folder.getAverageFraud() < 50 ? 'background-color-medium'
+                           : folder.getAverageFraud() < 75 ? 'background-color-high'
+                           : 'background-color-very-high'}">
+                  </div>
+                </div>
+                <span class="fraud-percentage" th:text="${#numbers.formatDecimal(folder.getAverageFraud(), 2, 2)} + '%'">20%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="ms-auto">Darvy Betances</div>
+  </footer>
+
+</div>
+
+<!-- Panel lateral derecho -->
+<div id="sidePanel" class="side-panel">
+  <div class="modal-header">
+    <h5 class="modal-title" id="sidePanelTitle">Crear un Folder</h5>
+    <span class="btn-close-icon" onclick="closeSidePanel()">
+      <i class="fa fa-times"></i>
+    </span>
+  </div>
+  <div class="side-panel-content">
+    <form id="folder-form">
+      <div class="form-group mb-4">
+        <label for="folderName" class="mb-2"><i class="fa fa-folder"></i> Nombre del Folder:</label>
+        <input type="text" class="form-control" id="folderName" name="name">
+      </div>
+      <div class="form-group mb-2">
+        <label for="folderDescription" class="mb-2"><i class="fa fa-pencil"></i> Descripción del Folder:</label>
+        <textarea class="form-control" id="folderDescription" name="description" rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-create-folder mt-3" id="submitBtn">Crear</button>
+    </form>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="/vendors/jquery/jquery.js"></script>
+<script src="/vendors/datatables/jquery.dataTables.js"></script>
+<script src="/vendors/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="/vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
+<script src="/vendors/simplebar/js/simplebar.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://kit.fontawesome.com/c6ad53a8f6.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/loading.js"></script>
+
+
+<script>
+  let currentFolderId = null; // Variable para almacenar el ID del folder actual
+  let resizeListenerActive = false; // Variable para controlar si el evento resize está activo
+
+  function openSidePanel(mode, folder = {}) {
+    const sidePanel = document.getElementById("sidePanel");
+    const sidePanelTitle = document.getElementById("sidePanelTitle");
+    const submitBtn = document.getElementById("submitBtn");
+    const folderNameInput = document.getElementById("folderName");
+    const folderDescriptionInput = document.getElementById("folderDescription");
+
+    if (mode === "edit") {
+      sidePanelTitle.textContent = "Editar Folder";
+      submitBtn.textContent = "Realizar Cambios";
+      folderNameInput.value = folder.name;
+      folderDescriptionInput.value = folder.description;
+      currentFolderId = folder.id;
+    } else {
+      sidePanelTitle.textContent = "Crear un Folder";
+      submitBtn.textContent = "Crear";
+      folderNameInput.value = "";
+      folderDescriptionInput.value = "";
+      currentFolderId = null;
+    }
+
+    sidePanel.style.width = getSidePanelWidth();
+    resizeListenerActive = true;
+  }
+
+  function closeSidePanel() {
+    document.getElementById("sidePanel").style.width = "0";
+    resizeListenerActive = false;
+    currentFolderId = null;
+  }
+
+  function getSidePanelWidth() {
+    const width = window.innerWidth;
+    if (width <= 768) {
+      return "80%";
+    } else if (width <= 1024) {
+      return "60%";
+    } else {
+      return "40%";
+    }
+  }
+
+  function adjustSidePanelWidth() {
+    if (resizeListenerActive) { // Verificar si el evento resize está activo
+      document.getElementById("sidePanel").style.width = getSidePanelWidth();
+    }
+  }
+
+  window.addEventListener("resize", adjustSidePanelWidth);
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const cardFolders = document.querySelectorAll('.card-folder');
+
+    cardFolders.forEach(card => {
+      const editButton = card.querySelector('.edit-folder-btn');
+      const deleteButton = card.querySelector('.delete-folder-btn');
+
+      editButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+        const folderId = editButton.getAttribute('data-folder-id');
+        const folderName = card.querySelector('span').textContent;
+        const folderDescription = card.querySelector('.card-folder-description span').textContent;
+
+        const folder = {
+          id: folderId,
+          name: folderName,
+          description: folderDescription
+        };
+
+        openSidePanel("edit", folder);
+      });
+
+      deleteButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+        const folderId = deleteButton.getAttribute('data-folder-id');
+        deleteFolder(folderId);
+      });
+
+      card.addEventListener('click', function(event) {
+        const target = event.target;
+        if (target.classList.contains('edit-folder-btn') || target.classList.contains('delete-folder-btn')) {
+          return;
+        }
+        const folderId = card.getAttribute('data-folder-id');
+        if (folderId) {
+          window.location.href = '/folders/' + folderId;
+        }
+      });
+    });
+
+    $('#folder-form').submit(function(e) {
+      e.preventDefault();
+      const folderName = $('#folderName').val();
+      const folderDescription = $('#folderDescription').val();
+
+      const formData = {
+        name: folderName,
+        description: folderDescription
+      };
+
+      if (currentFolderId) {
+        editFolder(currentFolderId, formData)
+      } else {
+        createFolder(formData)
+      }
+    });
+
+    function deleteFolder(folderId) {
+      // Preguntar al usuario si está seguro de eliminar el folder
+      Swal.fire({
+        icon: 'warning',
+        title: '<span style="color: #FAFEFE;">¿Estás seguro de eliminar este folder?</span>',
+        html: '<span style="color: #c45353;">Esta acción no se puede deshacer.</span>',
+        showCancelButton: true,
+        iconColor: '#c45353',  // Color personalizado del icono de éxito
+        background: '#214c72',
+        confirmButtonColor: '#c45353',
+        cancelButtonColor: '#00A7FF',
+        confirmButtonText: '<span style="color: #FAFEFE;">Sí, eliminar</span>',
+        cancelButtonText: '<span style="color: #FAFEFE;">Cancelar</span>',
+
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: 'DELETE',
+            url: '/folders/delete/' + folderId,
+            success: function(response) {
+              console.log('Folder eliminado correctamente:', response);
+              Swal.fire({
+                icon: 'success',
+                title: '<span style="color: #FAFEFE;">¡Folder eliminado!</span>',
+                html: '<span style="color: #FAFEFE;">El folder ha sido eliminado exitosamente.</span>',
+                iconColor: '#2FA473',
+                background: '#214c72',
+                showConfirmButton: false,
+                timer: 2000,
+              }).then(function() {
+                window.location.reload();
+              });
+            },
+            error: function(error) {
+              console.error('Error al eliminar el folder:', error);
+              Swal.fire({
+                icon: 'error',
+                title: '<span style="color: #FAFEFE;">¡Error!</span>',
+                html: '<span style="color: #FAFEFE;">Ha ocurrido un error al eliminar el folder.</span>',
+                iconColor: '#c45353',
+                background: '#214c72',
+                showConfirmButton: true,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: '<span style="color: #FAFEFE;">Aceptar</span>',
+                allowOutsideClick: true
+              });
+            }
+          });
+        }
+      });
+    }
+
+    function editFolder(folderId, formData) {
+      $.ajax({
+        type: 'PUT',
+        url: '/folders/edit/' + currentFolderId,
+        data: JSON.stringify(formData),
+        contentType: 'application/json',
+        success: function(response) {
+          console.log('Folder actualizado:', response);
+          closeSidePanel();
+          Swal.fire({
+            icon: 'success',
+            title: '<span style="color: #FAFEFE;">¡Folder actualizado!</span>',
+            html: '<span style="color: #FAFEFE;">El folder se ha actualizado exitosamente.</span>',
+            iconColor: '#2FA473',
+            background: '#214c72',
+            showConfirmButton: false,
+            timer: 2000,
+            allowOutsideClick: false
+          }).then(function() {
+            window.location.reload();
+          });
+        },
+        error: function(error) {
+          console.error('Error en la solicitud Ajax:', error);
+          let errorMessage = '<span style="color: #FAFEFE;">Ha ocurrido un error al actualizar el folder.</span><br><br>';
+          errorMessage += '<span style="color: #c45353;">' + error.responseText + '</span>'
+          Swal.fire({
+            icon: 'error',
+            title: '<span style="color: #FAFEFE;">¡Error!</span>',
+            html: errorMessage,
+            iconColor: '#c45353',
+            background: '#214c72',
+            showConfirmButton: false,
+            allowOutsideClick: true
+          });
+        }
+      });
+    }
+
+    function createFolder(formData) {
+      $.ajax({
+        type: 'POST',
+        url: '/folders/create',
+        data: JSON.stringify(formData),
+        contentType: 'application/json',
+        success: function(response) {
+          console.log('Folder creado:', response);
+          closeSidePanel();
+          Swal.fire({
+            icon: 'success',
+            title: '<span style="color: #FAFEFE;">¡Folder creado!</span>',
+            html: '<span style="color: #FAFEFE;">El folder se ha creado exitosamente.</span>',
+            iconColor: '#2FA473',
+            background: '#214c72',
+            showConfirmButton: false,
+            timer: 2000,
+            allowOutsideClick: false
+          }).then(function() {
+            window.location.reload();
+          });
+        },
+        error: function(error) {
+          console.error('Error en la solicitud Ajax:', error);
+          let errorMessage = '<span style="color: #FAFEFE;">Ha ocurrido un error al crear el folder.</span><br><br>';
+          errorMessage += '<span style="color: #c45353;">' + error.responseText + '</span>'
+          Swal.fire({
+            icon: 'error',
+            title: '<span style="color: #FAFEFE;">¡Error!</span>',
+            html: errorMessage,
+            iconColor: '#c45353',
+            background: '#214c72',
+            showConfirmButton: false,
+            allowOutsideClick: true
+          });
+        }
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
