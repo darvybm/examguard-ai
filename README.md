@@ -19,76 +19,117 @@
 
 # Examguard IA
 
-**Examguard IA** es una plataforma web avanzada diseñada para permitir a los usuarios trackear minuciosamente la actividad de una persona en una grabación de video con el propósito de identificar comportamientos fraudulentos a lo largo de la línea de tiempo. El sistema es capaz de trackear la posición de la cabeza, detectando cuándo la cabeza se encuentra a la derecha, izquierda, arriba, abajo, o al frente. Además, detecta la presencia del rostro y señala cuando este se encuentra ausente. Otra de sus funcionalidades es la detección de objetos, permitiendo trackear en el video la aparición de elementos como celulares o periféricos de computadora. Toda esta información es recopilada tras procesar el video, y luego se presenta en un reporte interactivo y dinámico. En este reporte, los usuarios pueden observar en el timeline los momentos específicos del video donde ocurrieron los eventos detectados, acompañados de evidencias visuales y diversas estadísticas.
+**Examguard IA** is an advanced web platform designed to allow users to meticulously track a person's activity in a video recording to identify fraudulent behaviors along the timeline. The system is capable of tracking head position, detecting when the head is to the right, left, up, down, or facing forward. It also detects the presence of the face and indicates when it is absent. Another feature is object detection, allowing the tracking of elements like mobile phones or computer peripherals in the video. All this information is collected after processing the video and is then presented in an interactive and dynamic report. In this report, users can view the specific moments in the video where detected events occurred, along with visual evidence and various statistics.
 
-La parte de inteligencia artificial en **Examguard IA** se construyó utilizando Python. Para la detección de objetos, se emplea la biblioteca **cvlib**. El tracking de la posición de la cabeza se realiza mediante el algoritmo **PnP** (Perspective-n-Point), apoyado por **MediaPipe** para obtener los puntos de referencia del rostro. El procesamiento de estos puntos y la iteración sobre los fotogramas del video se manejan con **OpenCV**, que también se utiliza para la detección de objetos. El sistema incorpora un modelo personalizado de detección de objetos entrenado con **YOLOv8**, utilizando un conjunto de imágenes extraídas de datasets de libre acceso como **COCO**, **OpenDataset**, y otros datasets disponibles en **Roboflow**. Todas estas técnicas se integran en un solo algoritmo en Python, el cual procesa los videos recibidos a través de una API construida en **Flask**, retornando los resultados analizados.
+The AI component of **Examguard IA** was built using Python. For object detection, the **cvlib** library is used. Head position tracking is performed using the **PnP** (Perspective-n-Point) algorithm, supported by **MediaPipe** to obtain facial landmark points. The processing of these points and the iteration over video frames are handled with **OpenCV**, which is also used for object detection. The system incorporates a custom object detection model trained with **YOLOv8**, using images extracted from freely available datasets like **COCO**, **OpenDataset**, and other datasets available on **Roboflow**. All these techniques are integrated into a single Python algorithm that processes the videos received through an API built in **Flask**, returning the analyzed results.
 
-La página web de **Examguard IA** está meticulosamente construida en Java, utilizando el framework **Spring Boot**. La autenticación y autorización de la aplicación se manejan con **Spring Security**. En el frontend, se utiliza **HTML**, **CSS**, **JavaScript**, y **Bootstrap**, basándose en el dashboard libre de **CoreUI**. Cuando un usuario carga un video en la plataforma construida con Spring Boot, este se conecta con la API de Python implementada en Flask. La comunicación entre Flask y Spring se gestiona mediante **JWT** (JSON Web Tokens). La API de Flask almacena el video en un sistema de archivos local y, si se le indica, lo procesa segundo por segundo (no fotograma por fotograma, para optimizar el tiempo de procesamiento).
+The **Examguard IA** website is meticulously built in Java, using the **Spring Boot** framework. Authentication and authorization are managed with **Spring Security**. On the frontend, **HTML**, **CSS**, **JavaScript**, and **Bootstrap** are used, based on the free dashboard from **CoreUI**. When a user uploads a video to the Spring Boot platform, it connects with the Python API implemented in Flask. Communication between Flask and Spring is managed via **JWT** (JSON Web Tokens). The Flask API stores the video in a local file system and, if instructed, processes it second by second (not frame by frame, to optimize processing time).
 
-## Tabla de Contenidos
-- [Características](#características)
-- [Aplicación](#aplicación)
-- [Herramientas Utilizadas](#herramientas-utilizadas)
-- [Cómo Instalar](#cómo-instalar)
-- [Contribuidores](#contribuidores)
-- [Licencia](#licencia)
-- [Contáctame](#contáctame)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/39c9e369-9c31-482b-b446-3c0bc1c26b8f" alt="Sign In" width="1000"/>
+</p>
 
-## Características
-**Features de Examguard IA**
+## Table of Contents
+- [Features](#features)
+- [Algorithm Preview](#algorithm-preview)
+- [Application](#application)
+- [Tools Used](#tools-used)
+- [Installation](#installation)
+- [Areas for Improvement](#areas-for-improvement)
+- [Contributors](#contributors)
+- [License](#license)
+- [Contact Me](#contact-me)
 
-- **Gestión de cuentas**: Los usuarios pueden crearse una cuenta e iniciar sesión, con la opción de recordar la sesión para futuros accesos.
 
-- **Manejo de grabaciones por carpetas**: Los usuarios pueden crear carpetas para organizar diferentes grabaciones. Por ejemplo, una carpeta puede representar una clase completa. Cada carpeta puede tener un título y una descripción, y al acceder a una, se mostrarán estadísticas generales calculadas a partir de los videos que contenga, como el Porcentaje de Fraude General y el Total de Eventos Fraudulentos.
+## Features
 
-> [!NOTE]  
-> Un evento se define como cualquier acto detectado en un segundo específico de la grabación.
+**Features of Examguard IA**
 
-- **Carga y procesamiento de múltiples grabaciones**: Los usuarios pueden cargar varias grabaciones de manera simultánea en un video. Antes de procesarlas, tienen la opción de definir qué se considera fraudulento según el contexto, seleccionando entre las siguientes opciones:
+- **Account Management**: Users can create accounts and log in, with the option to remember the session for future access.
 
-    | Evento Detectado             | Descripción                                  |
-    |------------------------------|----------------------------------------------|
-    | PHONE_DETECTED               | Detección de teléfono móvil                  |
-    | MOUSE_DETECTED               | Detección de ratón                           |
-    | KEYBOARD_DETECTED            | Detección de teclado                         |
-    | MONITOR_DETECTED             | Detección de monitor                         |
-    | LAPTOP_DETECTED              | Detección de laptop                          |
-    | NOT_FACE_DETECTED            | Rostro no detectado                          |
-    | MULTIPLE_FACE_DETECTED       | Múltiples rostros detectados                 |
-    | HEAD_POSE_LEFT               | Cabeza girada a la izquierda                 |
-    | HEAD_POSE_RIGHT              | Cabeza girada a la derecha                   |
-    | HEAD_POSE_UP                 | Cabeza mirando hacia arriba                  |
-    | HEAD_POSE_DOWN               | Cabeza mirando hacia abajo                   |
-    | HEAD_POSE_FORWARD            | Cabeza mirando al frente                     |
-    | HEAD_POSE_UNKNOWN            | Posición de cabeza desconocida               |
-    | SAFE                         | Acción considerada segura                    |
-
-- **Análisis detallado de grabaciones**: Tras el procesamiento, los usuarios pueden acceder a un detalle exhaustivo de cada grabación, donde se visualizan estadísticas individuales, como el porcentaje de fraude, gráficos de la cantidad de fraude detectado por tipo de evento, y gráficos de tendencia de la mirada.
-
-- **Interacción con el timeline de eventos fraudulentos**: En el detalle de la grabación, se genera un timeline que marca cada evento fraudulento detectado. Al hacer clic en un segmento del timeline, se despliega un panel que muestra evidencias visuales de lo detectado, incluidas imágenes y secuencias en formato GIF para ayudar a comprender mejor el contexto.
+- **Recording Management by Folders**: Users can create folders to organize different recordings. For instance, a folder might represent an entire class. Each folder can have a title and description, and upon accessing it, general statistics calculated from the videos it contains will be displayed, such as Overall Fraud Percentage and Total Fraudulent Events.
 
 > [!NOTE]  
-> El porcentaje de fraude detectado es una métrica basada en el cálculo del rango de tiempo en que se detectó el evento en relación con la duración total del video. Este cálculo puede ser controversial; por ejemplo, si alguien utiliza un celular durante 5 segundos en un video de una hora, el porcentaje de fraude sería extremadamente bajo.
+> An event is defined as any detected act at a specific second of the recording.
 
-- **Asociación de grabaciones a personas**: Los usuarios pueden asociar una grabación a un estudiante o persona específica y enviar correos electrónicos con los resultados obtenidos.
+- **Upload and Processing of Multiple Recordings**: Users can upload multiple recordings simultaneously. Before processing them, they have the option to define what is considered fraudulent based on the context, selecting from the following options:
+
+    | Detected Event               | Description                                   |
+    |------------------------------|-----------------------------------------------|
+    | PHONE_DETECTED               | Mobile phone detected                         |
+    | MOUSE_DETECTED               | Mouse detected                                |
+    | KEYBOARD_DETECTED            | Keyboard detected                             |
+    | MONITOR_DETECTED             | Monitor detected                              |
+    | LAPTOP_DETECTED              | Laptop detected                               |
+    | NOT_FACE_DETECTED            | Face not detected                             |
+    | MULTIPLE_FACE_DETECTED       | Multiple faces detected                       |
+    | HEAD_POSE_LEFT               | Head turned left                             |
+    | HEAD_POSE_RIGHT              | Head turned right                            |
+    | HEAD_POSE_UP                 | Head looking up                              |
+    | HEAD_POSE_DOWN               | Head looking down                            |
+    | HEAD_POSE_FORWARD            | Head looking forward                         |
+    | HEAD_POSE_UNKNOWN            | Unknown head position                        |
+    | SAFE                         | Action considered safe                       |
+
+- **Detailed Recording Analysis**: After processing, users can access an in-depth detail of each recording, where individual statistics are displayed, such as the fraud percentage, graphs of detected fraud by event type, and gaze trend graphs.
+
+- **Interaction with the Fraudulent Events Timeline**: In the recording detail, a timeline is generated that marks each detected fraudulent event. Clicking on a segment of the timeline displays a panel showing visual evidence of what was detected, including images and GIF sequences to help better understand the context.
+
+> [!NOTE]  
+> The detected fraud percentage is a metric based on the time range when the event was detected relative to the total duration of the video. This calculation can be controversial; for example, if someone uses a phone for 5 seconds in a one-hour video, the fraud percentage would be extremely low.
+
+- **Association of Recordings to People**: Users can associate a recording with a specific student or person and send emails with the obtained results.
+
+## **Algorithm Preview**
+
+This section provides an overview of how the algorithm processes a video to detect faces, estimate head rotation, and identify objects.
+
+### **Workflow**
+1. **Video Input:** The algorithm starts by receiving a video file.
+2. **Frame Extraction:** The video is decomposed into frames, with one frame selected per second.
+3. **Face Detection:**
+   - **Single Face:** If a face is detected, the algorithm estimates the head's rotation.
+   - **No Face:** It registers the absence of a face.
+   - **Multiple Faces:** It detects and records the presence of multiple faces.
+4. **Object Detection:** Simultaneously, the YOLO model identifies and classifies objects in the frame.
+
+ <p align="center">
+  <img src="https://github.com/user-attachments/assets/3bca3175-be08-4809-8ac9-afc945eedc6f" alt="Sign In" width="800"/>
+</p>
+
+
+### **Object Detection Results**
+The YOLO model effectively identified objects across various conditions, showing improvements in key metrics over 30 epochs:
+- **Precision:** Increased from 0.66988 to 0.77241.
+- **Recall:** Improved from 0.66753 to 0.74952.
+- **mAP50:** Rose from 0.68484 to 0.79044.
+- **Validation Losses:** Decreased consistently, indicating strong generalization.
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/cef8b380-50dc-40c1-98d0-64f38f1d23a9" alt="Sign In" width="800"/>
+</p>
+
+
+### **Face Detection & Landmark Estimation**
+Using cvlib, face detection was successful, though it faced challenges with faces too close or too far from the camera. MediaPipe provided precise and detailed landmark estimations, crucial for understanding facial geometry.
 
 > [!IMPORTANT]  
-> Asegúrese de revisar y validar los eventos detectados antes de enviar los resultados, ya que la interpretación del contexto puede variar según el caso.
+> Ensure to review and validate the detected events before sending the results, as the interpretation of the context may vary depending on the case.
 
-### **Application**
+## **Application**
 
-**Vista de bienvenida**  
- Esta vista inicial presenta la marca de **Examguard IA**. La imagen principal es un búho, que simboliza el lema de la aplicación: "Con Examguard, protege tus evaluaciones como un búho vigila su territorio."
+**Welcome View**  
+This initial view displays the **Examguard IA** branding. The main image is an owl, symbolizing the application's motto: "With Examguard, protect your assessments as an owl guards its territory."
 
  <p align="center">
   <img src="https://github.com/user-attachments/assets/f944211d-8e68-4098-a12f-7c5a7432cb79" alt="Sign In" width="800"/>
 </p>
 
-**Vista de login/register**  
- En esta vista, los usuarios pueden iniciar sesión o registrarse en la plataforma. También se ofrece la opción de recordar la sesión para mantenerla iniciada en futuros accesos.
+**Login/Register View**  
+In this view, users can log in or register on the platform. There is also the option to remember the session for future logins.
 
  > [!WARNING]  
- > No se pueden procesar videos ni realizar operaciones en la aplicación o la API sin estar registrado y autenticado. La API de Flask es solo para uso interno de Spring Boot.
+ > Videos cannot be processed or operations performed in the application or API without being registered and authenticated. The Flask API is for internal use by Spring Boot only.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/a363b327-872b-4355-afbc-d22af5e0dbce" alt="Sign In" width="800"/>
@@ -98,15 +139,15 @@ La página web de **Examguard IA** está meticulosamente construida en Java, uti
   <img src="https://github.com/user-attachments/assets/468ca4d3-6ed6-4484-9180-8e63397b5f42" alt="Sign In" width="800"/>
 </p>
 
-**Vista de home**  
- Vista simple que da la bienvenida al usuario, mostrando su información personal y ofreciendo la opción de cambiar la contraseña.
+**Home View**  
+A simple view welcoming the user, displaying their personal information and offering the option to change the password.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/a4e942f3-46da-4004-9bb6-020981a63880" alt="Sign In" width="800"/>
 </p>
 
-**Vista de folder list**  
- Aquí se listan los folders creados por el usuario. Se muestran como tarjetas donde se puede ver el nombre del folder, la descripción, la cantidad de grabaciones contenidas y una barra de progreso que indica la cantidad de fraude detectado. Además, se puede crear un nuevo folder mediante un panel lateral desplegable.
+**Folder List View**  
+Here, the folders created by the user are listed. They appear as cards where you can see the folder name, description, number of recordings contained, and a progress bar indicating the amount of detected fraud. Additionally, you can create a new folder through a collapsible side panel.
 
  <p align="center">
   <img src="https://github.com/user-attachments/assets/0236da48-d190-4f75-8fb5-666dd48316a1" alt="Sign In" width="800"/>
@@ -116,35 +157,31 @@ La página web de **Examguard IA** está meticulosamente construida en Java, uti
   <img src="https://github.com/user-attachments/assets/1821247c-d474-4bfe-aebf-75a9dc1ccf5e" alt="Sign In" width="800"/>
 </p>
 
+**Recording List View**  
+This view shows all recordings, regardless of the folder they are in. It presents detailed statistics, including:
 
-
-**Vista de recording list**  
- Esta vista muestra todas las grabaciones, independientemente del folder en el que se encuentren. Se presentan estadísticas detalladas, incluyendo:
-
- - Porcentaje de Fraude
- - Total de Eventos
- - Total de Eventos Fraudulentos
- - Total de Grabaciones
- - Grabaciones no Procesadas
- - Tiempo Total en Grabaciones
- - Tiempo Promedio por Grabación
- - Grabaciones Procesadas
+ - Fraud Percentage
+ - Total Events
+ - Total Fraudulent Events
+ - Total Recordings
+ - Unprocessed Recordings
+ - Total Time in Recordings
+ - Average Time per Recording
+ - Processed Recordings
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/8fb8e5fb-467d-43d1-a4d7-c4ce3ccb2829" alt="Sign In" width="800"/>
 </p>
 
-
-**Vista de student list**  
- En esta vista se listan los estudiantes, o las personas que se pueden asociar a una grabación. Los usuarios tienen la opción de editar o eliminar a los estudiantes registrados.
+**Student List View**  
+In this view, students or people that can be associated with a recording are listed. Users have the option to edit or delete registered students.
 
  <p align="center">
   <img src="https://github.com/user-attachments/assets/37c2b485-4aea-4f9b-bf62-62533df32b80" alt="Sign In" width="800"/>
  </p>
 
-
-**Vista del detalle de un folder**  
-Esta vista presenta primero un panel con estadísticas generales del folder. A continuación, se ofrece un área de drag and drop para cargar o arrastrar grabaciones. Después, se muestran gráficos referenciales, seguidos de una tabla que lista las grabaciones con sus metadatos (duración, estado de procesamiento, estudiante asociado, porcentaje de fraude, etc.). La tabla también incluye un panel de botones para ver el detalle de la grabación, procesarla o eliminarla. Al seleccionar procesar, se abre un modal que permite al usuario elegir qué eventos desea detectar.
+**Folder Detail View**  
+This view first presents a panel with general statistics about the folder. Next, there is a drag-and-drop area for uploading or dragging recordings. Following this, reference graphs are displayed, followed by a table listing the recordings with their metadata (duration, processing status, associated student, fraud percentage, etc.). The table also includes a button panel to view the recording details, process it, or delete it. When selecting process, a modal opens allowing the user to choose which events to detect.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/8e99fdb9-4fb7-4607-b33f-16edb752f41c" alt="Sign In" width="800"/>
@@ -154,9 +191,8 @@ Esta vista presenta primero un panel con estadísticas generales del folder. A c
   <img src="https://github.com/user-attachments/assets/1eed3e25-d761-45e4-ad4a-6fcc5af45b59" alt="Sign In" width="800"/>
 </p>
 
-**Vista del detalle de una grabación**  
-Esta es una de las vistas más importantes de la plataforma. Primero se muestran las estadísticas detectadas en la grabación, seguidas de dos gráficos: uno de barras que muestra la Cantidad de Fraude Detectado por Tipo de Evento y otro de radar que presenta la Tendencia de la Mirada. Luego, se muestra un panel que indica los eventos seleccionados previamente. Finalmente, se encuentra la sección crucial de la lista de timelines, donde se genera un timeline por cada tipo de evento fraudulento detectado. Si se detecta fraude en un segmento del tiempo, este se marca con un color distinto. Al hacer clic en ese segmento, se abre un panel que muestra una lista de imágenes que corroboran lo detectado. El usuario puede navegar por estas imágenes, entre segmentos, e incluso generar GIFs con la secuencia de imágenes dentro de un segmento.
-
+**Recording Detail View**  
+This is one of the most important views on the platform. It first displays the detected statistics for the recording, followed by two graphs: a bar chart showing the Amount of Detected Fraud by Event Type and a radar chart presenting Gaze Trend. Next, a panel indicates the previously selected events. Finally, the crucial section of the timeline list is displayed, where a timeline is generated for each type of detected fraudulent event. If fraud is detected in a time segment, it is marked with a different color. Clicking on that segment opens a panel showing a list of images corroborating the detection. Users can navigate through these images, between segments, and even generate GIFs with the sequence of images within a segment.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/f717e191-0b7d-4906-9758-c50933ceb572" alt="Sign In" width="800"/>
@@ -170,71 +206,74 @@ Esta es una de las vistas más importantes de la plataforma. Primero se muestran
   <img src="https://github.com/user-attachments/assets/b85f615b-c40b-45f8-b656-40a04508da46" alt="Sign In" width="800"/>
 </p>
 
-Aquí te presento la sección de **Tools** con badges que representan las tecnologías utilizadas:
 
-### **Tools**
+## **Tools Used**
 
-- ![Java](https://img.shields.io/badge/Java-007396?logo=java&logoColor=white&style=flat-square) **Java**: Lenguaje de programación principal para el desarrollo backend de la plataforma.
+- ![Java](https://img.shields.io/badge/Java-007396?logo=java&logoColor=white&style=flat-square) **Java**: Main programming language used for backend development of the platform.
   
-- ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?logo=spring-boot&logoColor=white&style=flat-square) **Spring Boot**: Framework utilizado para construir el backend de la aplicación, proporcionando una arquitectura robusta y escalable.
+- ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?logo=spring-boot&logoColor=white&style=flat-square) **Spring Boot**: Framework used to build the backend of the application, providing a robust and scalable architecture.
   
-- ![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?logo=spring-security&logoColor=white&style=flat-square) **Spring Security**: Implementado para la autenticación y autorización dentro de la plataforma, asegurando que solo usuarios registrados y autenticados puedan acceder a las funciones.
+- ![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?logo=spring-security&logoColor=white&style=flat-square) **Spring Security**: Implemented for authentication and authorization within the platform, ensuring that only registered and authenticated users can access the functions.
   
-- ![JWT](https://img.shields.io/badge/JWT-000000?logo=json-web-tokens&logoColor=white&style=flat-square) **JWT (JSON Web Tokens)**: Utilizado para manejar la autenticación entre la aplicación web y la API de Flask, garantizando una comunicación segura.
+- ![JWT](https://img.shields.io/badge/JWT-000000?logo=json-web-tokens&logoColor=white&style=flat-square) **JWT (JSON Web Tokens)**: Used to manage authentication between the web application and the Flask API, ensuring secure communication.
   
-- ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white&style=flat-square) **MongoDB**: Base de datos NoSQL utilizada para almacenar los datos de la plataforma.
+- ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white&style=flat-square) **MongoDB**: NoSQL database used to store the platform's data.
   
-- ![GridFS](https://img.shields.io/badge/GridFS-47A248?logo=mongodb&logoColor=white&style=flat-square) **GridFS de MongoDB**: Empleado para almacenar las imágenes de evidencia detectadas en los videos, permitiendo un manejo eficiente de archivos binarios de gran tamaño.
+- ![GridFS](https://img.shields.io/badge/GridFS-47A248?logo=mongodb&logoColor=white&style=flat-square) **MongoDB GridFS**: Used to store detected evidence images in videos, allowing efficient management of large binary files.
   
-- ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white&style=flat-square) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white&style=flat-square) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black&style=flat-square) ![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?logo=bootstrap&logoColor=white&style=flat-square) **HTML, CSS, JS, Bootstrap**: Tecnologías front-end utilizadas para crear una interfaz de usuario interactiva y responsiva. Bootstrap se utilizó como base para el diseño del dashboard (usando el dashboard libre de CoreUI).
+- ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white&style=flat-square) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white&style=flat-square) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black&style=flat-square) ![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?logo=bootstrap&logoColor=white&style=flat-square) **HTML, CSS, JS, Bootstrap**: Front-end technologies used to create an interactive and responsive user interface. Bootstrap was used as the base for the dashboard design (using the free CoreUI dashboard).
   
-- ![Gif Encoder](https://img.shields.io/badge/Gif_Encoder-4285F4?logo=square&logoColor=white&style=flat-square) **Gif Encoder de Square**: Librería en Java utilizada para la creación de GIFs a partir de secuencias de imágenes detectadas en los videos. [Gif Encoder de Square](https://github.com/square/gifencoder)
+- ![Gif Encoder](https://img.shields.io/badge/Gif_Encoder-4285F4?logo=square&logoColor=white&style=flat-square) **Gif Encoder by Square**: Java library used for creating GIFs from sequences of images detected in the videos. [Gif Encoder by Square](https://github.com/square/gifencoder)
   
-- ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white&style=flat-square) **Python**: Lenguaje utilizado para desarrollar la lógica de procesamiento de videos e inteligencia artificial.
+- ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white&style=flat-square) **Python**: Language used to develop video processing and artificial intelligence logic.
   
-- ![Flask](https://img.shields.io/badge/Flask-000000?logo=flask&logoColor=white&style=flat-square) **Flask**: Framework web ligero utilizado para crear la API REST que procesa los videos y devuelve los resultados a la aplicación Java.
+- ![Flask](https://img.shields.io/badge/Flask-000000?logo=flask&logoColor=white&style=flat-square) **Flask**: Lightweight web framework used to create the REST API that processes videos and returns results to the Java application.
   
-- ![Local File System](https://img.shields.io/badge/File_System-4A4A4A?logo=data&logoColor=white&style=flat-square) **Sistema de archivos local**: Utilizado para almacenar temporalmente las grabaciones de video antes de su procesamiento por la API de Flask.
+- ![Local File System](https://img.shields.io/badge/File_System-4A4A4A?logo=data&logoColor=white&style=flat-square) **Local File System**: Used to temporarily store video recordings before processing them by the Flask API.
   
-- ![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?logo=opencv&logoColor=white&style=flat-square) **OpenCV**: Librería de visión por computadora utilizada para iterar los fotogramas de los videos y realizar el análisis necesario.
+- ![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?logo=opencv&logoColor=white&style=flat-square) **OpenCV**: Computer vision library used to iterate over video frames and perform necessary analysis.
   
-- ![Cvlib](https://img.shields.io/badge/Cvlib-5C3EE8?logo=opencv&logoColor=white&style=flat-square) **Cvlib**: Utilizado específicamente para la detección de rostros dentro de los videos.
+- ![Cvlib](https://img.shields.io/badge/Cvlib-5C3EE8?logo=opencv&logoColor=white&style=flat-square) **Cvlib**: Specifically used for face detection within videos.
   
-- ![Mediapipe](https://img.shields.io/badge/Mediapipe-FF6699?logo=mediapipe&logoColor=white&style=flat-square) **Mediapipe**: Utilizado para la estimación de puntos faciales, permitiendo un seguimiento preciso de la posición de la cabeza y otros movimientos faciales.
+- ![Mediapipe](https://img.shields.io/badge/Mediapipe-FF6699?logo=mediapipe&logoColor=white&style=flat-square) **Mediapipe**: Used for facial landmark estimation, allowing precise tracking of head position and other facial movements.
   
-- ![Yolov8](https://img.shields.io/badge/Yolov8-FFCC00?logo=yolo&logoColor=black&style=flat-square) **Yolov8**: Modelo de detección de objetos entrenado para identificar elementos específicos dentro de las grabaciones.
+- ![Yolov8](https://img.shields.io/badge/Yolov8-FFCC00?logo=yolo&logoColor=black&style=flat-square) **Yolov8**: Object detection model trained to identify specific elements within recordings.
   
-- ![SendGrid](https://img.shields.io/badge/SendGrid-00BFFF?logo=sendgrid&logoColor=white&style=flat-square) **SendGrid**: Servicio de envío de correos electrónicos utilizado para notificar a los usuarios sobre los resultados de las evaluaciones.
+- ![SendGrid](https://img.shields.io/badge/SendGrid-00BFFF?logo=sendgrid&logoColor=white&style=flat-square) **SendGrid**: Email service used to notify users about evaluation results.
   
-- ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white&style=flat-square) ![Docker Compose](https://img.shields.io/badge/Docker_Compose-2496ED?logo=docker&logoColor=white&style=flat-square) **Docker y Docker Compose**: Herramientas utilizadas para contenerizar y orquestar la aplicación y sus servicios, facilitando su despliegue y escalabilidad.
+- ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white&style=flat-square) ![Docker Compose](https://img.shields.io/badge/Docker_Compose-2496ED?logo=docker&logoColor=white&style=flat-square) **Docker and Docker Compose**: Tools used to containerize and orchestrate the application and its services, facilitating deployment and scalability.
 
 
-### **How to Use**
+Claro, aquí está la sección actualizada con las rutas específicas para los archivos:
 
-#### **Requerimientos**
+---
 
-- **Base de Datos:** Configurar una base de datos local o en la nube de MongoDB.
-- **Entorno de Desarrollo:** Si no usas Docker, asegúrate de tener Python 3.12 y Java 17 instalados en tu sistema.
-- **Modelo de Pytorch:** Necesitarás un modelo de Pytorch que detecte objetos.
+## **Installation**
+
+#### **Requirements**
+
+- **Database:** Configure a local or cloud MongoDB database.
+- **Development Environment:** If not using Docker, ensure Python 3.12 and Java 17 are installed on your system.
+- **PyTorch Model:** You will need a PyTorch model for object detection.
 
 > [!IMPORTANT]  
-> No se incluye el modelo preentrenado debido a restricciones de derechos.
+> The pre-trained model is not included due to licensing restrictions.
 
-#### **Métodos de Instalación**
+#### **Installation Methods**
 
-Puedes instalar la aplicación de dos maneras: usando Docker Compose o configurándola manualmente en un IDE o consola.
+You can install the application in two ways: using Docker Compose or setting it up manually in an IDE or console.
 
-**Paso 1: Clonar el repositorio**
+**Step 1: Clone the Repository**
 
-Clona el repositorio en tu máquina local.
+Clone the repository to your local machine.
 
 ```bash
 git clone https://github.com/darvybm/examguard-ai
 ```
 
-**Paso 2: Configurar las Clases del Modelo**
+**Step 2: Configure Model Classes**
 
-Antes de iniciar, debes configurar las clases del modelo en el archivo `cheat_detector_optimized.py`. Dirígete al siguiente fragmento de código:
+Before starting, you need to configure the model classes in the `cheat_detector_optimized.py` file. Locate the file in `ModelAPI/cheat_detector_optimized.py` and find the following code snippet:
 
 ```python
 def __init__(self, model_path):
@@ -247,16 +286,18 @@ def __init__(self, model_path):
         self.height = 384
 ```
 
-Aquí puedes agregar o quitar clases según lo que tu modelo pueda detectar.
+Here, you can add or remove classes based on what your model can detect.
 
 > [!WARNING]  
-> El modelo debe tener la extensión `.pt`.
+> The model must have the `.pt` extension.
 
-**Paso 3: Ajustar los Tipos de Eventos**
+**Step 3: Adjust Event Types**
 
-Si las clases de tu modelo son diferentes a las mostradas, debes agregar o eliminar esos tipos de eventos tanto en Python como en Java.
+If your model classes differ from those shown, you need to add or remove those event types in both Python and Java.
 
-**En Python (`EventType`):**
+**In Python (`EventType`):**
+
+Edit the `EventType` class in `ModelAPI/app.py`:
 
 ```python
 class EventType(Enum):
@@ -275,12 +316,14 @@ class EventType(Enum):
     SAFE = "SAFE"
 ```
 
-**En Java (`EventType`):**
+**In Java (`EventType`):**
+
+Edit the `EventType` enum in `ExamGuard/src/main/java/pucmm/eict/proyectofinal/examguard/model/enums/EventType.java`:
 
 ```java
 public enum EventType {
 
-    //Objects
+    // Objects
     PHONE_DETECTED,
     MOUSE_DETECTED,
     KEYBOARD_DETECTED,
@@ -303,82 +346,79 @@ public enum EventType {
 }
 ```
 
-#### **Método 1: Usando Docker Compose**
+#### **Method 1: Using Docker Compose**
 
-1. **Crear archivo `.env`:** Crea un archivo `.env` en la raíz del proyecto con las siguientes variables de entorno:
+1. **Create `.env` File:** Create a `.env` file in the root of the project with the following environment variables:
 
     ```plaintext
-    JWT_SECRET_KEY=<tu-secreto-jwt>
-    JWT_EXPIRATION_TIME=<tiempo-de-expiración-jwt>
+    JWT_SECRET_KEY=<your-jwt-secret>
+    JWT_EXPIRATION_TIME=<jwt-expiration-time>
     FLASK_API_URL=http://flask-api:5000/api
     SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/examguard
     ```
 
-2. **Iniciar el proyecto con Docker Compose:**
+2. **Start the Project with Docker Compose:**
 
     ```bash
     docker-compose up --build
     ```
 
-#### **Método 2: Instalación Manual sin Docker**
+#### **Method 2: Manual Installation without Docker**
 
-1. **Configurar Entorno Virtual de Python:**
+1. **Configure Python Virtual Environment:**
 
-   - Navega a la carpeta `ModelAPI` y crea un entorno virtual de Python.
+   - Navigate to the `ModelAPI` folder and create a Python virtual environment.
 
     ```bash
     python3.12 -m venv venv
-    source venv/bin/activate  # En Linux/Mac
-    venv\Scripts\activate  # En Windows
+    source venv/bin/activate  # On Linux/Mac
+    venv\Scripts\activate  # On Windows
     ```
 
-   - Instala las dependencias del archivo `requirements.txt`.
+   - Install dependencies from the `requirements.txt` file.
 
     ```bash
     pip install -r requirements.txt
     ```
 
-2. **Ajustar Variables de Entorno:**
+2. **Adjust Environment Variables:**
 
-   - Configura las variables necesarias en el archivo `application.properties` de Spring Boot y en `app.py` de Flask.
+   - Configure the necessary variables in the `application.properties` file for Spring Boot (located in `ExamGuard/src/main/resources/application.properties`) and in `app.py` for Flask (located in `ModelAPI/app.py`).
 
 > [!IMPORTANT]  
-> Agrega las variables `JWT_SECRET_KEY` tanto en el archivo `app.py` como en el `application.properties`.
+> Add the `JWT_SECRET_KEY` variable in both `app.py` and `application.properties`.
 
-3. **Iniciar Servicios:**
+3. **Start Services:**
 
-   - Inicia la API REST de Flask:
+   - Start the Flask REST API:
 
     ```bash
-    python app.py
+    python ModelAPI/app.py
     ```
 
-   - Corre la aplicación de Spring Boot con Gradle:
+   - Run the Spring Boot application with Gradle:
 
     ```bash
     ./gradlew bootRun
     ```
-    
-Aquí tienes la sección de **Posibles mejoras en el futuro**:
 
-## **Posibles mejoras en el futuro**
+## **Areas for Improvement**
 
-- **Integración de Conversión de Voz a Texto:**  
-  Integrar un sistema de conversión de voz a texto que permita transcribir las interacciones verbales de los usuarios durante las evaluaciones. Esto facilitará la detección de comportamientos sospechosos, como llamadas telefónicas entre compañeros, intercambio de respuestas, u otro tipo de comunicación verbal no autorizada.
+- **Voice-to-Text Integration:**  
+  Integrate a voice-to-text system to transcribe verbal interactions during assessments. This will facilitate the detection of suspicious behaviors such as phone calls between peers, exchange of answers, or other unauthorized verbal communications.
 
-- **Optimización del Modelo de Detección de Objetos:**  
-  Refinar y ajustar el modelo de detección de objetos para mejorar su precisión, especialmente en condiciones de iluminación variable o cuando los objetos estén parcialmente ocultos.
+- **Object Detection Model Optimization:**  
+  Refine and adjust the object detection model to improve accuracy, especially under varying lighting conditions or when objects are partially obscured.
 
-- **Mejora del Algoritmo Perspective-n-Point (PnP):**  
-  Mejorar el algoritmo PnP para manejar de manera más efectiva los casos en los que los rostros están completamente de perfil, asegurando una detección más precisa de las orientaciones de la cabeza.
+- **Perspective-n-Point (PnP) Algorithm Enhancement:**  
+  Improve the PnP algorithm to handle cases where faces are completely profile, ensuring more precise detection of head orientations.
 
-- **Implementación de un Gestor de Ficheros en la Nube:**  
-  Implementar un gestor de ficheros en la nube de alto rendimiento para la gestión y almacenamiento de datos, facilitando el escalado y la eficiencia en el manejo de grandes volúmenes de información.
+- **Cloud File Management System Implementation:**  
+  Implement a high-performance cloud file management system for data management and storage, facilitating scaling and efficiency in handling large volumes of information.
 
 
-Aquí tienes la sección de **Contribuidores** actualizada según tus indicaciones:
+## **Contributors**
 
-## **Contribuidores**
 <table>
   <tr>
     <td align="center">
@@ -388,7 +428,7 @@ Aquí tienes la sección de **Contribuidores** actualizada según tus indicacion
         <sub><b>Darvy Betances</b></sub>
       </a>
       <br />
-      <span>Creador del Código</span>
+      <span>Code Creator</span>
     </td>
     <td align="center">
       <a href="https://pucmm.edu.do/">
@@ -397,24 +437,28 @@ Aquí tienes la sección de **Contribuidores** actualizada según tus indicacion
         <sub><b>Pontificia Universidad Católica Madre y Maestra (PUCMM)</b></sub>
       </a>
       <br />
-      <span>Institución Educativa</span>
+      <span>Educational Institution</span>
     </td>
   </tr>
 </table>
 
 ---
 
-**Agradecimientos:**  
-Quiero agradecer a mi familia por su constante apoyo durante todo este proceso. Su respaldo ha sido esencial para el desarrollo de este proyecto.
+**Acknowledgments:**  
+I want to thank my family for their constant support throughout this process. Their backing has been essential for the development of this project.
 
-También agradezco a mi asesor, **Máximo Medrano**, por su orientación y ayuda durante el proyecto. Su conocimiento y asistencia fueron clave para su éxito.
+I also thank my advisor, **Máximo Medrano**, for his guidance and assistance throughout the project. His knowledge and help were crucial for its success.
 
-Además, agradezco a mis profesores por brindarme las herramientas y conocimientos necesarios, y a mis compañeros de promoción por su apoyo y colaboración a lo largo de estos años. Su compañerismo ha sido muy valioso para mi. ¡Gracias a todos!
+Additionally, I appreciate my professors for providing me with the necessary tools and knowledge, and my fellow students for their support and collaboration over the years. Their camaraderie has been very valuable to me. Thank you all!
 
-## Licencia
-Este proyecto está destinado exclusivamente a fines educativos y de investigación. No está autorizado para ser utilizado con fines comerciales. Todos los derechos están reservados y el uso del código o cualquier parte del proyecto con fines comerciales está prohibido.
+---
 
-## Contáctame
+## **License**
+
+This project is intended exclusively for educational and research purposes. It is not authorized for commercial use. All rights are reserved, and any commercial use of the code or any part of the project is prohibited.
+
+
+## **Contact Me**
 
 <p align="center">
   <a href="https://www.linkedin.com/in/darvybm" target="_blank">
