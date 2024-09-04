@@ -21,7 +21,7 @@
 
 **Examguard IA** is an advanced web platform designed to allow users to meticulously track a person's activity in a video recording to identify fraudulent behaviors along the timeline. The system is capable of tracking head position, detecting when the head is to the right, left, up, down, or facing forward. It also detects the presence of the face and indicates when it is absent. Another feature is object detection, allowing the tracking of elements like mobile phones or computer peripherals in the video. All this information is collected after processing the video and is then presented in an interactive and dynamic report. In this report, users can view the specific moments in the video where detected events occurred, along with visual evidence and various statistics.
 
-The AI component of **Examguard IA** was built using Python. For object detection, the **cvlib** library is used. Head position tracking is performed using the **PnP** (Perspective-n-Point) algorithm, supported by **MediaPipe** to obtain facial landmark points. The processing of these points and the iteration over video frames are handled with **OpenCV**, which is also used for object detection. The system incorporates a custom object detection model trained with **YOLOv8**, using images extracted from freely available datasets like **COCO**, **OpenDataset**, and other datasets available on **Roboflow**. All these techniques are integrated into a single Python algorithm that processes the videos received through an API built in **Flask**, returning the analyzed results.
+The AI component of **Examguard IA** was built using Python. For face detection, the **cvlib** library is used. Head position tracking is performed using the **PnP** (Perspective-n-Point) algorithm, supported by **MediaPipe** to obtain facial landmark points. The processing of these landmark points and the iteration over video frames are handled with **OpenCV**, which is also used for object detection. The system incorporates a custom object detection model trained with **YOLOv8**, using images extracted from freely available datasets like **COCO**, **OpenDataset**, and other datasets available on **Roboflow**. All these techniques are integrated into a single Python algorithm that processes the videos received through an API built in **Flask**, returning the analyzed results.
 
 The **Examguard IA** website is meticulously built in Java, using the **Spring Boot** framework. Authentication and authorization are managed with **Spring Security**. On the frontend, **HTML**, **CSS**, **JavaScript**, and **Bootstrap** are used, based on the free dashboard from **CoreUI**. When a user uploads a video to the Spring Boot platform, it connects with the Python API implemented in Flask. Communication between Flask and Spring is managed via **JWT** (JSON Web Tokens). The Flask API stores the video in a local file system and, if instructed, processes it second by second (not frame by frame, to optimize processing time).
 
@@ -49,7 +49,7 @@ The **Examguard IA** website is meticulously built in Java, using the **Spring B
 
 - **Recording Management by Folders**: Users can create folders to organize different recordings. For instance, a folder might represent an entire class. Each folder can have a title and description, and upon accessing it, general statistics calculated from the videos it contains will be displayed, such as Overall Fraud Percentage and Total Fraudulent Events.
 
-> [!NOTE]  
+> [!IMPORTANT]  
 > An event is defined as any detected act at a specific second of the recording.
 
 - **Upload and Processing of Multiple Recordings**: Users can upload multiple recordings simultaneously. Before processing them, they have the option to define what is considered fraudulent based on the context, selecting from the following options:
@@ -99,7 +99,7 @@ This section provides an overview of how the algorithm processes a video to dete
 
 
 ### **Object Detection Results**
-The YOLO model effectively identified objects across various conditions, showing improvements in key metrics over 30 epochs:
+The YOLOv8 model medium effectively identified objects across various conditions, showing improvements in key metrics over 30 epochs:
 - **Precision:** Increased from 0.66988 to 0.77241.
 - **Recall:** Improved from 0.66753 to 0.74952.
 - **mAP50:** Rose from 0.68484 to 0.79044.
@@ -243,10 +243,6 @@ This is one of the most important views on the platform. It first displays the d
   
 - ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white&style=flat-square) ![Docker Compose](https://img.shields.io/badge/Docker_Compose-2496ED?logo=docker&logoColor=white&style=flat-square) **Docker and Docker Compose**: Tools used to containerize and orchestrate the application and its services, facilitating deployment and scalability.
 
-
-Claro, aquí está la sección actualizada con las rutas específicas para los archivos:
-
----
 
 ## **Installation**
 
