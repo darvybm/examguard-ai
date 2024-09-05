@@ -93,10 +93,9 @@ This section provides an overview of how the algorithm processes a video to dete
    - **Multiple Faces:** It detects and records the presence of multiple faces.
 4. **Object Detection:** Simultaneously, the YOLO model identifies and classifies objects in the frame.
 
- <p align="center">
-  <img src="https://github.com/user-attachments/assets/3bca3175-be08-4809-8ac9-afc945eedc6f" alt="Sign In" width="800"/>
+ <<p align="center">
+  <img src="https://github.com/user-attachments/assets/9946d381-3d9d-4e18-9e93-77beef823dc6" alt="Sign In" width="800"/>
 </p>
-
 
 ### **Object Detection Results**
 The YOLOv8 model medium effectively identified objects across various conditions, showing improvements in key metrics over 30 epochs:
@@ -115,6 +114,14 @@ Using cvlib, face detection was successful, though it faced challenges with face
 
 > [!IMPORTANT]  
 > Ensure to review and validate the detected events before sending the results, as the interpretation of the context may vary depending on the case.
+
+<p align="center">
+  <img src="https://github.com/darvybm/examguard-ai/blob/main/algorithm-demo/algorithm-test-2.gif" alt="Sign In" width="800"/>
+</p>
+
+<p align="center">
+  <img src="https://github.com/darvybm/examguard-ai/blob/main/algorithm-demo/algorithm-test.gif" alt="Sign In" width="800"/>
+</p>
 
 ## **Application**
 
