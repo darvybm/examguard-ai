@@ -93,8 +93,8 @@ This section provides an overview of how the algorithm processes a video to dete
    - **Multiple Faces:** It detects and records the presence of multiple faces.
 4. **Object Detection:** Simultaneously, the YOLO model identifies and classifies objects in the frame.
 
- <<p align="center">
-  <img src="https://github.com/user-attachments/assets/9946d381-3d9d-4e18-9e93-77beef823dc6" alt="Sign In" width="800"/>
+ <p align="center">
+  <img src="https://github.com/user-attachments/assets/9946d381-3d9d-4e18-9e93-77beef823dc6" alt="Sign In" width="700"/>
 </p>
 
 ### **Object Detection Results**
