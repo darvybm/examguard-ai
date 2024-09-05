@@ -13,4 +13,4 @@ EXPOSE 8080
 
 COPY --from=build /home/gradle/src/build/libs/*.jar /app/examguard.jar
 
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app/examguard.jar"]
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app/examguard.jar", "--host=0.0.0.0"]
