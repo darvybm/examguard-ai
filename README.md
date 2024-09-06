@@ -1,21 +1,29 @@
 <p align="center"> 
-  <img src="https://github.com/user-attachments/assets/177812da-9b37-4fcd-a1fb-1342d8f587ac" alt="Examguard IA" width="400"/> 
+  <img src="https://github.com/user-attachments/assets/94aa08be-abbb-4fce-9cc1-79e85a719a5f" alt="Examguard IA"/> 
 </p> 
 
-<p align="center"> 
-  <img src="https://img.shields.io/badge/Language-Java%20%7C%20Python-blue" alt="Language Badge"/> 
-  <img src="https://img.shields.io/badge/Framework-SpringBoot-brightgreen" alt="Spring Boot Badge"/> 
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white" alt="Java Badge"/>
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python Badge"/>
+  <img src="https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=spring&logoColor=white" alt="Spring Boot Badge"/>
+  <img src="https://img.shields.io/badge/Flask-ff9?style=for-the-badge&logo=flask&logoColor=black" alt="Flask Badge"/>
+  <img src="https://img.shields.io/badge/Computer%20Vision-17A2B8?style=for-the-badge&logo=openai&logoColor=white" alt="Computer Vision Badge"/>
+  <img src="https://img.shields.io/badge/Deep%20Learning-FF9A00?style=for-the-badge&logo=tensorflow&logoColor=white" alt="Deep Learning Badge"/>
 </p>
-<p align="center"> 
-  <img src="https://img.shields.io/badge/API-Flask-yellow" alt="API Badge"/> 
-  <img src="https://img.shields.io/badge/AI-Object%20Detection%20%7C%20Face%20Recognition-red" alt="AI Badge"/> 
-  <img src="https://img.shields.io/badge/Model-YOLOv8-orange" alt="YOLOv8 Badge"/>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/AI-Object%20Detection-red?style=for-the-badge" alt="AI Badge"/>
+  <img src="https://img.shields.io/badge/AI-Face%20Recognition-red?style=for-the-badge" alt="AI Badge"/>
+  <img src="https://img.shields.io/badge/Model-YOLOv8-orange?style=for-the-badge" alt="YOLOv8 Badge"/>
 </p>
-<p align="center"> 
-  <img src="https://img.shields.io/badge/Libraries-OpenCV%20%7C%20MediaPipe%20%7C%20CVLib-lightgrey" alt="Libraries Badge"/> 
-  <img src="https://img.shields.io/badge/Computer%20Vision-Enabled-brightblue" alt="Computer Vision Badge"/> 
-  <img src="https://img.shields.io/badge/Deep%20Learning-Powered%20by%20PyTorch-brightpurple" alt="Deep Learning Badge"/>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white" alt="OpenCV Badge"/>
+  <img src="https://img.shields.io/badge/MediaPipe-00695C?style=for-the-badge&logo=mediapipe&logoColor=white" alt="MediaPipe Badge"/>
+  <img src="https://img.shields.io/badge/CVLib-FFA000?style=for-the-badge&logo=visualstudiocode&logoColor=white" alt="CVLib Badge"/>
 </p>
+
+
 
 # Examguard IA
 
