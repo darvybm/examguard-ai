@@ -3,26 +3,19 @@
 </p> 
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white" alt="Java Badge" height="20"/>
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python Badge" height="20"/>
-  <img src="https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=spring&logoColor=white" alt="Spring Boot Badge" height="20"/>
-  <img src="https://img.shields.io/badge/Flask-ff9?style=for-the-badge&logo=flask&logoColor=black" alt="Flask Badge" height="20"/>
-  <img src="https://img.shields.io/badge/Computer%20Vision-17A2B8?style=for-the-badge&logo=openai&logoColor=white" alt="Computer Vision Badge" height="20"/>
-  <img src="https://img.shields.io/badge/Deep%20Learning-FF9A00?style=for-the-badge&logo=tensorflow&logoColor=white" alt="Deep Learning Badge" height="20"/>
+  <img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white" alt="Java Badge" />
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python Badge" />
+  <img src="https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=spring&logoColor=white" alt="Spring Boot Badge" />
+  <img src="https://img.shields.io/badge/Flask-ff9?style=for-the-badge&logo=flask&logoColor=black" alt="Flask Badge" />
+  <img src="https://img.shields.io/badge/Computer%20Vision-17A2B8?style=for-the-badge&logo=openai&logoColor=white" alt="Computer Vision Badge" />
+  <img src="https://img.shields.io/badge/Deep%20Learning-FF9A00?style=for-the-badge&logo=tensorflow&logoColor=white" alt="Deep Learning Badge" />
+  <img src="https://img.shields.io/badge/AI-Object%20Detection-red?style=for-the-badge" alt="AI Object Detection Badge" />
+  <img src="https://img.shields.io/badge/AI-Face%20Recognition-red?style=for-the-badge" alt="AI Face Recognition Badge" />
+  <img src="https://img.shields.io/badge/Model-YOLOv8-orange?style=for-the-badge" alt="YOLOv8 Badge" />
+  <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white" alt="OpenCV Badge" />
+  <img src="https://img.shields.io/badge/MediaPipe-00695C?style=for-the-badge&logo=mediapipe&logoColor=white" alt="MediaPipe Badge" />
+  <img src="https://img.shields.io/badge/CVLib-FFA000?style=for-the-badge&logo=visualstudiocode&logoColor=white" alt="CVLib Badge" />
 </p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/AI-Object%20Detection-red?style=for-the-badge" alt="AI Object Detection Badge" height="20"/>
-  <img src="https://img.shields.io/badge/AI-Face%20Recognition-red?style=for-the-badge" alt="AI Face Recognition Badge" height="20"/>
-  <img src="https://img.shields.io/badge/Model-YOLOv8-orange?style=for-the-badge" alt="YOLOv8 Badge" height="20"/>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white" alt="OpenCV Badge" height="20"/>
-  <img src="https://img.shields.io/badge/MediaPipe-00695C?style=for-the-badge&logo=mediapipe&logoColor=white" alt="MediaPipe Badge" height="20"/>
-  <img src="https://img.shields.io/badge/CVLib-FFA000?style=for-the-badge&logo=visualstudiocode&logoColor=white" alt="CVLib Badge" height="20"/>
-</p>
-
 
 # Examguard IA
 
